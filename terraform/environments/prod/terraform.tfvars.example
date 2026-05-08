@@ -1,0 +1,11 @@
+# Prod environment — copy to terraform.tfvars and fill in values
+# WARNING: Apply only after test environment is fully validated
+snowflake_account            = "pdriyqm-bt31389"
+snowflake_username           = "your-accountadmin-user"
+snowflake_password           = "your-accountadmin-password"
+dbt_user_password            = "Prod_Dbt_2026!#Secure"
+airflow_user_password        = "Prod_Airflow_2026!#Secure"
+azure_subscription_id        = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+azure_location               = "eastus"
+azure_storage_account_name   = "stfinanceprod001"
+replication_type             = "GRS"

@@ -7,18 +7,18 @@ resource "snowflake_database" "finance" {
 # ── Warehouses ────────────────────────────────────────────────────────────────
 resource "snowflake_warehouse" "ingest" {
   name           = "FINANCE_INGEST_WH"
-  warehouse_size = "X-SMALL"
-  auto_suspend   = 60
+  warehouse_size = var.warehouse_size
+  auto_suspend   = var.auto_suspend_sec
   auto_resume    = true
-  comment        = "Used for Stripe ingestion COPY INTO operations"
+  comment        = "Used for Stripe ingestion COPY INTO operations — ${var.environment}"
 }
 
 resource "snowflake_warehouse" "transform" {
   name           = "FINANCE_TRANSFORM_WH"
-  warehouse_size = "X-SMALL"
-  auto_suspend   = 60
+  warehouse_size = var.warehouse_size
+  auto_suspend   = var.auto_suspend_sec
   auto_resume    = true
-  comment        = "Used for dbt transformations"
+  comment        = "Used for dbt transformations — ${var.environment}"
 }
 
 # ── Roles ─────────────────────────────────────────────────────────────────────

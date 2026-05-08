@@ -1,0 +1,104 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "terraform/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to plan/apply (dev | test | prod)"
+        required: true
+        default: "dev"
+        type: choice
+        options: [dev, test, prod]
+      action:
+        description: "Terraform action"
+        required: true
+        default: "plan"
+        type: choice
+        options: [plan, apply]
+
+jobs:
+  # ── Validate all environments on every PR ────────────────────────────────────
+  validate:
+    name: Validate (${{ matrix.env }})
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    strategy:
+      matrix:
+        env: [dev, test, prod]
+
+    defaults:
+      run:
+        working-directory: terraform/environments/${{ matrix.env }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.x"
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive ../../
+
+      - name: Terraform Init (local backend for validation)
+        run: |
+          terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+  # ── Plan on manual trigger ───────────────────────────────────────────────────
+  plan-apply:
+    name: "${{ github.event.inputs.action }} — ${{ github.event.inputs.environment }}"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    environment: ${{ github.event.inputs.environment }}
+
+    defaults:
+      run:
+        working-directory: terraform/environments/${{ github.event.inputs.environment }}
+
+    env:
+      TF_VAR_snowflake_account:         ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      TF_VAR_snowflake_username:        ${{ secrets.SNOWFLAKE_USERNAME }}
+      TF_VAR_snowflake_password:        ${{ secrets.SNOWFLAKE_PASSWORD }}
+      TF_VAR_dbt_user_password:         ${{ secrets.DBT_USER_PASSWORD }}
+      TF_VAR_airflow_user_password:     ${{ secrets.AIRFLOW_USER_PASSWORD }}
+      TF_VAR_azure_subscription_id:     ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      TF_VAR_azure_storage_account_name: ${{ secrets[format('{0}_STORAGE_ACCOUNT_NAME', github.event.inputs.environment)] }}
+      ARM_CLIENT_ID:                    ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET:                ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID:                    ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID:              ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.x"
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=tfplan -no-color 2>&1 | tee plan_output.txt
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-${{ github.event.inputs.environment }}
+          path: terraform/environments/${{ github.event.inputs.environment }}/tfplan
+          retention-days: 3
+
+      - name: Terraform Apply
+        if: github.event.inputs.action == 'apply'
+        run: terraform apply -auto-approve tfplan

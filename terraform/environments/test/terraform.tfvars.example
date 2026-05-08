@@ -1,0 +1,9 @@
+# Test environment — copy to terraform.tfvars and fill in values
+snowflake_account            = "pdriyqm-bt31389"
+snowflake_username           = "your-accountadmin-user"
+snowflake_password           = "your-accountadmin-password"
+dbt_user_password            = "Test_Dbt_2026!"
+airflow_user_password        = "Test_Airflow_2026!"
+azure_subscription_id        = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+azure_location               = "eastus"
+azure_storage_account_name   = "stfinancetest001"

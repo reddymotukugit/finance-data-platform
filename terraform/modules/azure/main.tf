@@ -16,7 +16,7 @@ resource "azurerm_storage_account" "finance" {
   resource_group_name      = azurerm_resource_group.finance.name
   location                 = azurerm_resource_group.finance.location
   account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_replication_type = var.replication_type
   account_kind             = "StorageV2"
 
   # Enable hierarchical namespace = ADLS Gen2

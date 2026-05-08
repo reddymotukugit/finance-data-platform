@@ -17,3 +17,9 @@ variable "storage_account_name" {
   description = "Azure storage account name"
   type        = string
 }
+
+variable "replication_type" {
+  description = "Storage account replication type (LRS for dev/test, GRS for prod)"
+  type        = string
+  default     = "LRS"
+}
