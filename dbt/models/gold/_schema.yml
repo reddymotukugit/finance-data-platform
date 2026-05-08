@@ -46,3 +46,54 @@ models:
         tests: [not_null, unique]
       - name: date_day
         tests: [not_null, unique]
+
+  - name: dim_plans
+    description: "Subscription plan dimension — billing cadence, pricing tier, monthly and annual price in USD."
+    columns:
+      - name: plan_key
+        tests: [not_null, unique]
+      - name: plan_id
+        tests: [not_null]
+      - name: billing_cadence
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Monthly', 'Quarterly', 'Semi-Annual', 'Annual', 'Weekly', 'Daily']
+      - name: pricing_tier
+        tests:
+          - accepted_values:
+              values: ['Starter', 'Growth', 'Professional', 'Enterprise']
+
+  - name: dim_currencies
+    description: "Currency reference dimension — currency name, symbol, region, and latest FX rate to USD."
+    columns:
+      - name: currency_key
+        tests: [not_null, unique]
+      - name: currency_code
+        tests: [not_null, unique]
+      - name: latest_usd_rate
+        tests: [not_null]
+
+  - name: dim_geography
+    description: "Billing geography dimension — country, region (APAC/EMEA/Americas), sub-region, and market tier."
+    columns:
+      - name: geography_key
+        tests: [not_null, unique]
+      - name: country_code
+        tests: [not_null, unique]
+      - name: region
+        tests:
+          - accepted_values:
+              values: ['Americas', 'EMEA', 'APAC', 'Other']
+
+  - name: dim_payment_category
+    description: "Payment event type reference dimension — financial classification, sign convention, revenue and cash impact flags."
+    columns:
+      - name: payment_category_key
+        tests: [not_null, unique]
+      - name: event_type
+        tests: [not_null]
+      - name: financial_category
+        tests:
+          - accepted_values:
+              values: ['Revenue', 'Contra-Revenue', 'Cash Movement', 'Adjustment', 'Other']
