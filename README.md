@@ -1,5 +1,9 @@
 # Finance Data Platform
 
+[![dbt CI](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/dbt-ci.yml/badge.svg)](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/dbt-ci.yml)
+[![dbt Docs](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/dbt-docs.yml/badge.svg)](https://reddymotukugit.github.io/finance-data-platform/)
+[![Terraform CI](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/terraform-ci.yml/badge.svg)](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/terraform-ci.yml)
+
 A production-grade financial data pipeline built on **Azure ADLS Gen2 · Snowflake · dbt · Apache Airflow**.
 
 Ingests Stripe financial events daily, transforms them through a Bronze → Silver → Gold medallion architecture, and delivers clean, analytics-ready fact and dimension tables for revenue reporting and MRR tracking.

@@ -97,3 +97,63 @@ models:
         tests:
           - accepted_values:
               values: ['Revenue', 'Contra-Revenue', 'Cash Movement', 'Adjustment', 'Other']
+
+  - name: fct_charges
+    description: "Payment attempts — one row per Stripe charge. Links to dim_customers, dim_dates, dim_currencies. Cross-references fct_transactions via balance_transaction_id."
+    columns:
+      - name: charge_id
+        tests: [not_null, unique]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['succeeded', 'pending', 'failed', 'unknown']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: fct_refunds
+    description: "Issued refunds — one row per Stripe refund. signed_amount_usd always negative (contra-revenue). Links to fct_charges via charge_id."
+    columns:
+      - name: refund_id
+        tests: [not_null, unique]
+      - name: reason
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['requested_by_customer', 'duplicate', 'fraudulent', 'expired_uncaptured_charge']
+      - name: signed_amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: fct_disputes
+    description: "Chargebacks — one row per Stripe dispute. outcome_category (Won/Lost/In Progress) determines financial impact. loss_amount_usd only non-zero when lost."
+    columns:
+      - name: dispute_id
+        tests: [not_null, unique]
+      - name: outcome_category
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Won', 'Lost', 'Charge Refunded', 'Warning', 'In Progress', 'Unknown']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: fct_payouts
+    description: "Bank disbursements — one row per Stripe payout. transit_days measures cash-flow lag. Arrival date dimension key enables cash-flow calendar reporting."
+    columns:
+      - name: payout_id
+        tests: [not_null, unique]
+      - name: method
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['standard', 'instant']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]

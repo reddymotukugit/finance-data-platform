@@ -1,0 +1,109 @@
+version: 2
+
+models:
+  - name: stg_finance_ledger_events
+    description: "Silver ledger — one row per atomic finance event from raw_stripe_balance_transactions. FX-normalised to USD, amounts in dollars, signed by event type."
+    columns:
+      - name: transaction_id
+        tests: [not_null, unique]
+      - name: event_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['charge', 'refund', 'dispute', 'payout', 'transfer', 'adjustment', 'payment']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: stg_customers_history
+    description: "Silver customer history — SCD Type 2. One row per customer per change period. Use is_current = TRUE for the latest snapshot."
+    columns:
+      - name: customer_key
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+      - name: billing_country
+        tests: [not_null]
+      - name: is_current
+        tests: [not_null]
+
+  - name: stg_invoice_line_items
+    description: "Silver invoice line items — MRR source of truth. Recurring lines only. Amounts normalised to monthly equivalent in USD."
+    columns:
+      - name: line_item_id
+        tests: [not_null, unique]
+      - name: mrr_amount_usd
+        tests: [not_null]
+      - name: period_start_date
+        tests: [not_null]
+
+  - name: stg_charges
+    description: "Silver charges — one row per Stripe charge attempt. Amounts in dollars, FX-normalised to USD. Links to balance_transaction_id for ledger reconciliation."
+    columns:
+      - name: charge_id
+        tests: [not_null, unique]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['succeeded', 'pending', 'failed', 'unknown']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: stg_refunds
+    description: "Silver refunds — one row per refund issued against a charge. signed_amount_usd is always negative (contra-revenue)."
+    columns:
+      - name: refund_id
+        tests: [not_null, unique]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['succeeded', 'pending', 'failed', 'canceled', 'unknown']
+      - name: reason
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['requested_by_customer', 'duplicate', 'fraudulent', 'expired_uncaptured_charge']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: stg_disputes
+    description: "Silver disputes — one row per chargeback. outcome_category (Won/Lost/In Progress) drives financial impact. is_lost charges signed_amount_usd as a write-off."
+    columns:
+      - name: dispute_id
+        tests: [not_null, unique]
+      - name: outcome_category
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Won', 'Lost', 'Charge Refunded', 'Warning', 'In Progress', 'Unknown']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: stg_payouts
+    description: "Silver payouts — one row per bank disbursement. transit_days measures cash-flow lag. is_instant flags higher-cost same-day payouts."
+    columns:
+      - name: payout_id
+        tests: [not_null, unique]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['paid', 'pending', 'in_transit', 'canceled', 'failed', 'unknown']
+      - name: method
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['standard', 'instant']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]

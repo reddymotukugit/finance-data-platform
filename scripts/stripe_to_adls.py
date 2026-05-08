@@ -114,27 +114,118 @@ def fetch_charges(watermark_ts: int = 0) -> pd.DataFrame:
     log.info(f"Fetching charges since unix={watermark_ts}")
     records = []
     for ch in stripe.Charge.auto_paging_iter(limit=100, created={"gt": watermark_ts}):
+        pmd  = getattr(ch, "payment_method_details", None) or {}
+        card = pmd.get("card", {}) if isinstance(pmd, dict) else getattr(pmd, "card", None) or {}
         records.append({
-            "id":               ch.id,
-            "object":           getattr(ch, "object", None),
-            "amount":           getattr(ch, "amount", None),
-            "amount_captured":  getattr(ch, "amount_captured", None),
-            "amount_refunded":  getattr(ch, "amount_refunded", None),
-            "captured":         getattr(ch, "captured", None),
-            "created":          getattr(ch, "created", None),
-            "currency":         getattr(ch, "currency", None),
-            "customer":         getattr(ch, "customer", None),
-            "description":      getattr(ch, "description", None),
-            "disputed":         getattr(ch, "disputed", None),
-            "failure_code":     getattr(ch, "failure_code", None),
-            "failure_message":  getattr(ch, "failure_message", None),
-            "invoice":          getattr(ch, "invoice", None),
-            "paid":             getattr(ch, "paid", None),
-            "payment_intent":   getattr(ch, "payment_intent", None),
-            "receipt_email":    getattr(ch, "receipt_email", None),
-            "refunded":         getattr(ch, "refunded", None),
-            "status":           getattr(ch, "status", None),
-            "raw_payload":      stripe_json(ch.to_dict()),
+            "id":                                   ch.id,
+            "object":                               getattr(ch, "object", None),
+            "amount":                               getattr(ch, "amount", None),
+            "amount_captured":                      getattr(ch, "amount_captured", None),
+            "amount_refunded":                      getattr(ch, "amount_refunded", None),
+            "captured":                             getattr(ch, "captured", None),
+            "created":                              getattr(ch, "created", None),
+            "currency":                             getattr(ch, "currency", None),
+            "customer":                             getattr(ch, "customer", None),
+            "description":                          getattr(ch, "description", None),
+            "disputed":                             getattr(ch, "disputed", None),
+            "failure_code":                         getattr(ch, "failure_code", None),
+            "failure_message":                      getattr(ch, "failure_message", None),
+            "invoice":                              getattr(ch, "invoice", None),
+            "paid":                                 getattr(ch, "paid", None),
+            "payment_intent":                       getattr(ch, "payment_intent", None),
+            "payment_method":                       getattr(ch, "payment_method", None),
+            "balance_transaction":                  getattr(ch, "balance_transaction", None),
+            "receipt_email":                        getattr(ch, "receipt_email", None),
+            "receipt_url":                          getattr(ch, "receipt_url", None),
+            "refunded":                             getattr(ch, "refunded", None),
+            "status":                               getattr(ch, "status", None),
+            "statement_descriptor":                 getattr(ch, "statement_descriptor", None),
+            # Flattened payment_method_details
+            "payment_method_details_type":          pmd.get("type") if isinstance(pmd, dict) else getattr(pmd, "type", None),
+            "payment_method_details_card_brand":    card.get("brand") if isinstance(card, dict) else getattr(card, "brand", None),
+            "payment_method_details_card_funding":  card.get("funding") if isinstance(card, dict) else getattr(card, "funding", None),
+            "payment_method_details_card_country":  card.get("country") if isinstance(card, dict) else getattr(card, "country", None),
+            "payment_method_details_card_last4":    card.get("last4") if isinstance(card, dict) else getattr(card, "last4", None),
+            "payment_method_details_card_exp_month":card.get("exp_month") if isinstance(card, dict) else getattr(card, "exp_month", None),
+            "payment_method_details_card_exp_year": card.get("exp_year") if isinstance(card, dict) else getattr(card, "exp_year", None),
+            "raw_payload":                          stripe_json(ch.to_dict()),
+        })
+    return pd.DataFrame(records)
+
+
+def fetch_refunds(watermark_ts: int = 0) -> pd.DataFrame:
+    log.info(f"Fetching refunds since unix={watermark_ts}")
+    records = []
+    for rf in stripe.Refund.auto_paging_iter(limit=100, created={"gt": watermark_ts}):
+        records.append({
+            "id":                           rf.id,
+            "object":                       getattr(rf, "object", None),
+            "amount":                       getattr(rf, "amount", None),
+            "currency":                     getattr(rf, "currency", None),
+            "status":                       getattr(rf, "status", None),
+            "reason":                       getattr(rf, "reason", None),
+            "created":                      getattr(rf, "created", None),
+            "charge":                       getattr(rf, "charge", None),
+            "payment_intent":               getattr(rf, "payment_intent", None),
+            "balance_transaction":          getattr(rf, "balance_transaction", None),
+            "description":                  getattr(rf, "description", None),
+            "receipt_number":               getattr(rf, "receipt_number", None),
+            "failure_balance_transaction":  getattr(rf, "failure_balance_transaction", None),
+            "failure_reason":               getattr(rf, "failure_reason", None),
+            "raw_payload":                  stripe_json(rf.to_dict()),
+        })
+    return pd.DataFrame(records)
+
+
+def fetch_disputes(watermark_ts: int = 0) -> pd.DataFrame:
+    log.info(f"Fetching disputes since unix={watermark_ts}")
+    records = []
+    for dp in stripe.Dispute.auto_paging_iter(limit=100, created={"gt": watermark_ts}):
+        evidence_details = getattr(dp, "evidence_details", None) or {}
+        records.append({
+            "id":                               dp.id,
+            "object":                           getattr(dp, "object", None),
+            "amount":                           getattr(dp, "amount", None),
+            "currency":                         getattr(dp, "currency", None),
+            "status":                           getattr(dp, "status", None),
+            "reason":                           getattr(dp, "reason", None),
+            "created":                          getattr(dp, "created", None),
+            "charge":                           getattr(dp, "charge", None),
+            "payment_intent":                   getattr(dp, "payment_intent", None),
+            "balance_transaction":              getattr(dp, "balance_transaction", None),
+            "is_charge_refundable":             getattr(dp, "is_charge_refundable", None),
+            # Flattened evidence_details
+            "evidence_details_due_by":          evidence_details.get("due_by") if isinstance(evidence_details, dict) else getattr(evidence_details, "due_by", None),
+            "evidence_details_has_evidence":    evidence_details.get("has_evidence") if isinstance(evidence_details, dict) else getattr(evidence_details, "has_evidence", None),
+            "raw_payload":                      stripe_json(dp.to_dict()),
+        })
+    return pd.DataFrame(records)
+
+
+def fetch_payouts(watermark_ts: int = 0) -> pd.DataFrame:
+    log.info(f"Fetching payouts since unix={watermark_ts}")
+    records = []
+    for po in stripe.Payout.auto_paging_iter(limit=100, created={"gt": watermark_ts}):
+        records.append({
+            "id":                           po.id,
+            "object":                       getattr(po, "object", None),
+            "amount":                       getattr(po, "amount", None),
+            "currency":                     getattr(po, "currency", None),
+            "status":                       getattr(po, "status", None),
+            "type":                         getattr(po, "type", None),
+            "method":                       getattr(po, "method", None),
+            "automatic":                    getattr(po, "automatic", None),
+            "arrival_date":                 getattr(po, "arrival_date", None),
+            "created":                      getattr(po, "created", None),
+            "destination":                  getattr(po, "destination", None),
+            "balance_transaction":          getattr(po, "balance_transaction", None),
+            "description":                  getattr(po, "description", None),
+            "statement_descriptor":         getattr(po, "statement_descriptor", None),
+            "source_type":                  getattr(po, "source_type", None),
+            "failure_code":                 getattr(po, "failure_code", None),
+            "failure_message":              getattr(po, "failure_message", None),
+            "failure_balance_transaction":  getattr(po, "failure_balance_transaction", None),
+            "raw_payload":                  stripe_json(po.to_dict()),
         })
     return pd.DataFrame(records)
 
@@ -287,6 +378,9 @@ def fetch_fx_rates() -> pd.DataFrame:
 ENTITY_FETCHERS = {
     "balance_transactions": fetch_balance_transactions,
     "charges":              fetch_charges,
+    "refunds":              fetch_refunds,
+    "disputes":             fetch_disputes,
+    "payouts":              fetch_payouts,
     "customers":            fetch_customers,
     "subscriptions":        fetch_subscriptions,
     "invoices":             fetch_invoices,

@@ -1,0 +1,89 @@
+version: 2
+
+exposures:
+
+  - name: revenue_dashboard
+    label: Revenue & MRR Dashboard
+    type: dashboard
+    maturity: high
+    url: https://app.powerbi.com/groups/finance/dashboards/revenue
+    description: >
+      Executive revenue dashboard — MRR, ARR, new/expansion/churn breakdown,
+      refund rate, and dispute win rate. Refreshed daily after pipeline completes.
+
+    depends_on:
+      - ref('fct_transactions')
+      - ref('fct_mrr_movements')
+      - ref('fct_refunds')
+      - ref('fct_disputes')
+      - ref('dim_customers')
+      - ref('dim_dates')
+      - ref('dim_plans')
+      - ref('dim_currencies')
+
+    owner:
+      name: Finance Team
+      email: finance@company.com
+
+  - name: payments_ops_dashboard
+    label: Payments Operations Dashboard
+    type: dashboard
+    maturity: medium
+    url: https://app.powerbi.com/groups/finance/dashboards/payments-ops
+    description: >
+      Operational payments dashboard — charge success rate, failure code analysis,
+      payment method breakdown, refund latency (days_since_charge), and
+      dispute resolution SLA tracking (days_to_evidence_due, is_overdue).
+
+    depends_on:
+      - ref('fct_charges')
+      - ref('fct_refunds')
+      - ref('fct_disputes')
+      - ref('dim_customers')
+      - ref('dim_dates')
+      - ref('dim_currencies')
+      - ref('dim_geography')
+      - ref('dim_payment_category')
+
+    owner:
+      name: Revenue Operations
+      email: rev-ops@company.com
+
+  - name: treasury_cash_flow_report
+    label: Treasury Cash Flow Report
+    type: ml
+    maturity: medium
+    url: https://app.powerbi.com/groups/finance/reports/treasury
+    description: >
+      Daily treasury report — net cash position from payouts, instant vs standard
+      payout split, transit_days distribution for cash-flow forecasting, and
+      failed payout monitoring.
+
+    depends_on:
+      - ref('fct_payouts')
+      - ref('fct_transactions')
+      - ref('dim_dates')
+      - ref('dim_currencies')
+
+    owner:
+      name: Treasury
+      email: treasury@company.com
+
+  - name: customer_health_report
+    label: Customer Health & Geography Report
+    type: dashboard
+    maturity: medium
+    description: >
+      Customer segmentation by geography (region, market tier), billing country,
+      and plan tier. Tracks MRR per customer cohort and churn signals.
+
+    depends_on:
+      - ref('dim_customers')
+      - ref('dim_geography')
+      - ref('dim_plans')
+      - ref('fct_mrr_movements')
+      - ref('fct_charges')
+
+    owner:
+      name: Customer Success
+      email: cs@company.com
