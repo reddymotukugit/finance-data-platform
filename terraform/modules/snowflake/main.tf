@@ -37,12 +37,6 @@ resource "snowflake_role" "analyst" {
   comment = "Read-only access to Gold schema for BI tools"
 }
 
-# ── Role hierarchy ────────────────────────────────────────────────────────────
-resource "snowflake_role_grants" "transformer_inherits_loader" {
-  role_name = snowflake_role.loader.name
-  roles     = [snowflake_role.transformer.name]
-}
-
 # ── Schemas ───────────────────────────────────────────────────────────────────
 resource "snowflake_schema" "raw" {
   database = snowflake_database.finance.name
@@ -93,77 +87,5 @@ resource "snowflake_user" "airflow" {
   must_change_password = false
 }
 
-# ── Role assignments ──────────────────────────────────────────────────────────
-resource "snowflake_user_grant" "dbt_transformer" {
-  privilege = "USAGE"
-  roles     = [snowflake_role.transformer.name]
-  user_name = snowflake_user.dbt.name
-}
-
-resource "snowflake_user_grant" "airflow_transformer" {
-  privilege = "USAGE"
-  roles     = [snowflake_role.transformer.name]
-  user_name = snowflake_user.airflow.name
-}
-
-# ── Warehouse grants ──────────────────────────────────────────────────────────
-resource "snowflake_warehouse_grant" "loader_ingest" {
-  warehouse_name = snowflake_warehouse.ingest.name
-  privilege      = "USAGE"
-  roles          = [snowflake_role.loader.name]
-}
-
-resource "snowflake_warehouse_grant" "transformer_transform" {
-  warehouse_name = snowflake_warehouse.transform.name
-  privilege      = "USAGE"
-  roles          = [snowflake_role.transformer.name]
-}
-
-# ── Database grants ───────────────────────────────────────────────────────────
-resource "snowflake_database_grant" "loader" {
-  database_name = snowflake_database.finance.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.loader.name]
-}
-
-resource "snowflake_database_grant" "transformer" {
-  database_name = snowflake_database.finance.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.transformer.name]
-}
-
-resource "snowflake_database_grant" "analyst" {
-  database_name = snowflake_database.finance.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.analyst.name]
-}
-
-# ── Schema grants ─────────────────────────────────────────────────────────────
-resource "snowflake_schema_grant" "loader_raw" {
-  database_name = snowflake_database.finance.name
-  schema_name   = snowflake_schema.raw.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.loader.name]
-}
-
-resource "snowflake_schema_grant" "transformer_all" {
-  for_each = {
-    raw    = snowflake_schema.raw.name
-    bronze = snowflake_schema.bronze.name
-    silver = snowflake_schema.silver.name
-    gold   = snowflake_schema.gold.name
-    audit  = snowflake_schema.audit.name
-  }
-
-  database_name = snowflake_database.finance.name
-  schema_name   = each.value
-  privilege     = "USAGE"
-  roles         = [snowflake_role.transformer.name]
-}
-
-resource "snowflake_schema_grant" "analyst_gold" {
-  database_name = snowflake_database.finance.name
-  schema_name   = snowflake_schema.gold.name
-  privilege     = "USAGE"
-  roles         = [snowflake_role.analyst.name]
-}
+# NOTE: Role grants and privilege assignments are managed via setup/snowflake_setup.sql
+# using ACCOUNTADMIN to avoid provider version compatibility issues with grant resources.

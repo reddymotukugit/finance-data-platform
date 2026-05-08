@@ -23,8 +23,8 @@ resource "azurerm_storage_account" "finance" {
   is_hns_enabled = true
 
   # Security settings
-  min_tls_version           = "TLS1_2"
-  enable_https_traffic_only = true
+  min_tls_version            = "TLS1_2"
+  https_traffic_only_enabled = true
 
   blob_properties {
     delete_retention_policy {
