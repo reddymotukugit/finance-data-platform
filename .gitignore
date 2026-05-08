@@ -10,6 +10,7 @@ dbt/dbt_packages/
 dbt/logs/
 dbt/.user.yml
 dbt/profiles.yml
+dbt/package-lock.yml
 
 # ── Airflow ───────────────────────────────────────────────────────────────────
 airflow/logs/
