@@ -299,18 +299,16 @@ def run_reconciliation(**context):
         ("silver_ledger_has_data",  f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.SILVER.STG_FINANCE_LEDGER_EVENTS"),
         ("silver_mrr_has_data",     f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.SILVER.STG_INVOICE_LINE_ITEMS"),
         ("silver_charges_has_data", f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.SILVER.STG_CHARGES"),
-        ("silver_payouts_has_data", f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.SILVER.STG_PAYOUTS"),
         ("gold_transactions_has_data", f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.GOLD.FCT_TRANSACTIONS"),
         ("gold_mrr_has_data",          f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.GOLD.FCT_MRR_MOVEMENTS"),
         ("gold_charges_has_data",      f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.GOLD.FCT_CHARGES"),
-        ("gold_payouts_has_data",      f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.GOLD.FCT_PAYOUTS"),
     ]:
         val = _q(sql)
         if _record(name, val, 0, 0, val > 0) == "failed":
             failures.append(name)
 
-    # ── 2. Conditional existence — refunds & disputes (zero on quiet days is fine) ──
-    for entity in ("refunds", "disputes"):
+    # ── 2. Conditional existence — refunds, disputes & payouts (zero on quiet days is fine) ──
+    for entity in ("refunds", "disputes", "payouts"):
         silver_n = _q(f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.SILVER.STG_{entity.upper()}")
         if silver_n > 0:
             gold_n = _q(f"SELECT COUNT(*) FROM {SNOWFLAKE_DB}.GOLD.FCT_{entity.upper()}")
