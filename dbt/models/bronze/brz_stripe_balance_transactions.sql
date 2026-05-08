@@ -16,7 +16,6 @@ WITH source AS (
 SELECT
     -- Natural key
     id,
-    "object"                                             AS stripe_object_type,
 
     -- Amounts (stored as cents in Stripe — keep as-is in Bronze)
     amount,
