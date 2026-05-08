@@ -463,3 +463,4 @@ if __name__ == "__main__":
 
     log.info(f"Starting ingestion | entity={args.entity} run_id={args.run_id} watermark={args.watermark}")
     run_ingestion(args.entity, args.run_id, args.watermark)
+# linted
