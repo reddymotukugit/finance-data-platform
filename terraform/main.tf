@@ -39,8 +39,8 @@ provider "azurerm" {
 module "snowflake" {
   source = "./modules/snowflake"
 
-  environment        = var.environment
-  snowflake_account  = var.snowflake_account
+  environment           = var.environment
+  snowflake_account     = var.snowflake_account
   dbt_user_password     = var.dbt_user_password
   airflow_user_password = var.airflow_user_password
 }
@@ -48,8 +48,8 @@ module "snowflake" {
 module "azure" {
   source = "./modules/azure"
 
-  environment         = var.environment
-  location            = var.azure_location
-  resource_group_name = var.azure_resource_group_name
+  environment          = var.environment
+  location             = var.azure_location
+  resource_group_name  = var.azure_resource_group_name
   storage_account_name = var.azure_storage_account_name
 }
