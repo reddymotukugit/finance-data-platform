@@ -385,7 +385,7 @@ with DAG(
     dag_id            = "finance_data_platform_daily",
     description       = "Finance platform — full daily batch pipeline (9 Stripe entities + FX rates)",
     default_args      = DEFAULT_ARGS,
-    schedule_interval = "0 14 * * *",  # 00:00 AEST (UTC+10) daily — midnight Australia
+    schedule_interval = "30 15 * * *",  # 01:30 AEST (UTC+10) daily — 15:30 UTC
     start_date        = days_ago(1),
     catchup           = False,
     max_active_runs   = 1,
