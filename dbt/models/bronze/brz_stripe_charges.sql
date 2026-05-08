@@ -10,8 +10,8 @@
   Bronze: Stripe Charges
   One row per charge attempt. Includes succeeded, failed, and pending charges.
   Amounts kept in original cents — conversion happens in Silver.
-  Payment method details are extracted from raw_payload VARIANT (full JSON).
-  Note: 'object' is a Snowflake reserved keyword and must be double-quoted.
+  All relationship keys and nested fields extracted from raw_payload VARIANT
+  to avoid dependency on optional flat columns in the RAW table.
 */
 
 WITH source AS (
@@ -38,22 +38,24 @@ SELECT
     COALESCE(disputed, FALSE)                       AS disputed,
 
     -- Currency
-    LOWER(COALESCE(currency, 'usd'))               AS currency,
+    LOWER(COALESCE(currency, 'usd'))                AS currency,
 
     -- Timestamps
     TO_TIMESTAMP(created)                           AS created_at,
     DATE(TO_TIMESTAMP(created))                     AS created_date,
 
-    -- Relationships
-    customer                                        AS customer_id,
-    invoice                                         AS invoice_id,
-    payment_intent                                  AS payment_intent_id,
-
-    -- Keys sourced from raw_payload (not promoted to flat columns in RAW table)
+    -- Relationships (all sourced from raw_payload for portability)
+    raw_payload:customer::STRING                    AS customer_id,
+    raw_payload:invoice::STRING                     AS invoice_id,
+    raw_payload:payment_intent::STRING              AS payment_intent_id,
     raw_payload:payment_method::STRING              AS payment_method_id,
     raw_payload:balance_transaction::STRING         AS balance_transaction_id,
+
+    -- Descriptive
     raw_payload:receipt_url::STRING                 AS receipt_url,
+    raw_payload:receipt_email::STRING               AS receipt_email,
     raw_payload:statement_descriptor::STRING        AS statement_descriptor,
+    description,
 
     -- Payment method details (flattened from raw_payload nested card object)
     LOWER(COALESCE(
@@ -78,10 +80,6 @@ SELECT
     -- Failure info
     failure_code,
     failure_message,
-
-    -- Descriptive
-    receipt_email,
-    description,
 
     -- Ingestion metadata
     source_file,
