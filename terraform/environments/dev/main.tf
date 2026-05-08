@@ -53,4 +53,5 @@ module "azure" {
   location             = var.azure_location
   resource_group_name  = "rg-finance-data-platform-dev"
   storage_account_name = var.azure_storage_account_name
+  replication_type     = var.replication_type  # LRS — cost-effective for dev
 }
