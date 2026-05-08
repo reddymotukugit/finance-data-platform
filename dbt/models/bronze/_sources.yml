@@ -1,0 +1,70 @@
+version: 2
+
+sources:
+  - name: raw
+    database: FINANCE_PLATFORM_DEV
+    schema: RAW
+    freshness:
+      warn_after:  {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: loaded_at
+
+    tables:
+      - name: raw_stripe_balance_transactions
+        description: "Raw Stripe balance transactions — foundation of the accounting ledger."
+        columns:
+          - name: id
+            tests: [not_null]
+
+      - name: raw_stripe_charges
+        description: "Raw Stripe charges."
+        columns:
+          - name: id
+            tests: [not_null]
+
+      - name: raw_stripe_customers
+        description: "Raw Stripe customer records."
+        columns:
+          - name: id
+            tests: [not_null]
+
+      - name: raw_stripe_subscriptions
+        description: "Raw Stripe subscription contracts."
+        columns:
+          - name: id
+            tests: [not_null]
+
+      - name: raw_stripe_invoices
+        description: "Raw Stripe invoices."
+        columns:
+          - name: id
+            tests: [not_null]
+
+      - name: raw_stripe_invoice_line_items
+        description: "Raw Stripe invoice line items — MRR source of truth."
+        columns:
+          - name: id
+            tests: [not_null]
+
+      - name: raw_stripe_prices
+        description: "Raw Stripe price definitions."
+
+      - name: raw_stripe_products
+        description: "Raw Stripe product catalog."
+
+      - name: raw_stripe_refunds
+        description: "Raw Stripe refunds."
+
+      - name: raw_stripe_disputes
+        description: "Raw Stripe disputes (chargebacks)."
+
+      - name: raw_stripe_payouts
+        description: "Raw Stripe payouts to bank."
+
+      - name: raw_fx_rates
+        description: "Daily FX exchange rates from external API."
+        columns:
+          - name: rate_date
+            tests: [not_null]
+          - name: rate
+            tests: [not_null]

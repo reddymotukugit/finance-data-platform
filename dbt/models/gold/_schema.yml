@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: fct_transactions
+    description: "The accounting ledger — one row per atomic finance event (charge, refund, dispute, payout). All amounts in USD."
+    columns:
+      - name: transaction_id
+        description: "Stripe balance transaction ID"
+        tests: [not_null, unique]
+      - name: event_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['charge', 'refund', 'dispute', 'payout', 'transfer', 'adjustment', 'payment']
+      - name: amount_usd
+        tests: [not_null]
+      - name: created_date
+        tests: [not_null]
+
+  - name: fct_mrr_movements
+    description: "MRR movements per customer + plan + month. New, Expansion, Contraction, Churn, No Change."
+    columns:
+      - name: mrr_key
+        tests: [not_null, unique]
+      - name: movement_type
+        tests:
+          - accepted_values:
+              values: ['New', 'Expansion', 'Contraction', 'Churn', 'No Change']
+      - name: mrr_usd
+        tests: [not_null]
+
+  - name: dim_customers
+    description: "SCD Type 2 customer dimension — full history of billing country and attribute changes."
+    columns:
+      - name: customer_key
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+      - name: billing_country
+        tests: [not_null]
+
+  - name: dim_dates
+    description: "Fiscal calendar dimension. Fiscal year July–June."
+    columns:
+      - name: date_key
+        tests: [not_null, unique]
+      - name: date_day
+        tests: [not_null, unique]

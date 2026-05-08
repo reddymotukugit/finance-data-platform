@@ -1,0 +1,88 @@
+name: dbt CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'dbt/**'
+      - '.github/workflows/dbt-ci.yml'
+
+jobs:
+  dbt-test:
+    name: Compile & Test dbt models
+    runs-on: ubuntu-latest
+
+    env:
+      DBT_PROFILES_DIR: ./dbt
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dbt
+        run: pip install dbt-snowflake==1.7.0
+
+      - name: Write dbt profiles.yml from secrets
+        run: |
+          cat > dbt/profiles.yml << EOF
+          finance_data_platform:
+            target: ci
+            outputs:
+              ci:
+                type: snowflake
+                account: "${{ secrets.SNOWFLAKE_ACCOUNT }}"
+                user: "${{ secrets.SNOWFLAKE_USER }}"
+                password: "${{ secrets.SNOWFLAKE_PASSWORD }}"
+                role: "${{ secrets.SNOWFLAKE_ROLE }}"
+                warehouse: "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+                database: "${{ secrets.SNOWFLAKE_DATABASE }}"
+                schema: BRONZE
+                threads: 4
+                client_session_keep_alive: false
+          EOF
+
+      - name: Install dbt packages
+        run: |
+          cd dbt
+          dbt deps
+
+      - name: dbt compile (syntax check)
+        run: |
+          cd dbt
+          dbt compile --profiles-dir . --target ci
+
+      - name: dbt run — Bronze
+        run: |
+          cd dbt
+          dbt run --select tag:bronze --profiles-dir . --target ci
+
+      - name: dbt run — Silver
+        run: |
+          cd dbt
+          dbt run --select tag:silver --profiles-dir . --target ci
+
+      - name: dbt run — Gold
+        run: |
+          cd dbt
+          dbt run --select tag:gold --profiles-dir . --target ci
+
+      - name: dbt test — all models
+        run: |
+          cd dbt
+          dbt test --profiles-dir . --target ci
+
+      - name: Upload dbt artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-logs
+          path: |
+            dbt/logs/
+            dbt/target/run_results.json
+          retention-days: 7
