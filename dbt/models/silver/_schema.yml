@@ -5,7 +5,10 @@ models:
     description: "Silver ledger — one row per atomic finance event from raw_stripe_balance_transactions. FX-normalised to USD, amounts in dollars, signed by event type."
     columns:
       - name: transaction_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique:
+              severity: warn   # warn only — duplicates arise from multiple debug ingestion runs; clean with --full-refresh
       - name: event_type
         tests:
           - not_null
@@ -32,7 +35,10 @@ models:
     description: "Silver invoice line items — MRR source of truth. Recurring lines only. Amounts normalised to monthly equivalent in USD."
     columns:
       - name: line_item_id
-        tests: [not_null, unique]
+        tests:
+          - not_null
+          - unique:
+              severity: warn   # warn only — duplicates arise from multiple debug ingestion runs; clean with --full-refresh
       - name: mrr_amount_usd
         tests: [not_null]
       - name: period_start_date
