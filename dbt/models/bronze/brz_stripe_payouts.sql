@@ -23,7 +23,7 @@ WITH source AS (
 SELECT
     -- Natural key
     id,
-    object,
+    "object"                                     AS stripe_object_type,
 
     -- Amount (cents — keep as-is in Bronze)
     amount,
@@ -47,7 +47,7 @@ SELECT
     TO_TIMESTAMP(created)                       AS created_at,
     DATE(TO_TIMESTAMP(created))                 AS created_date,
     TO_TIMESTAMP(arrival_date)                  AS arrival_at,
-    DATE(TO_TIMESTAMP(arrival_date))            AS arrival_date,
+    DATE(TO_TIMESTAMP(arrival_date))            AS arrival_date_key,
 
     -- Relationships
     destination                                 AS destination_id,  -- bank account / card

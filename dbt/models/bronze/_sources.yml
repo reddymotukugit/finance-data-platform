@@ -5,8 +5,8 @@ sources:
     database: FINANCE_PLATFORM_DEV
     schema: RAW
     freshness:
-      warn_after:  {count: 24, period: hour}
-      error_after: {count: 48, period: hour}
+      warn_after:  {count: 25, period: hour}   # 25h gives a 1-hour buffer over the 24h schedule
+      error_after: {count: 49, period: hour}   # 49h catches a missed run but not a weekend skip
     loaded_at_field: loaded_at
 
     tables:
@@ -47,19 +47,28 @@ sources:
             tests: [not_null]
 
       - name: raw_stripe_prices
-        description: "Raw Stripe price definitions."
+        description: "Raw Stripe price definitions (ingested on demand; not in daily batch)."
+        freshness: null   # not ingested daily — skip freshness check
 
       - name: raw_stripe_products
-        description: "Raw Stripe product catalog."
+        description: "Raw Stripe product catalog (ingested on demand; not in daily batch)."
+        freshness: null   # not ingested daily — skip freshness check
 
       - name: raw_stripe_refunds
         description: "Raw Stripe refunds."
+        freshness:
+          warn_after:  {count: 72, period: hour}   # refunds can be sparse; warn at 3 days
+          error_after: {count: 168, period: hour}   # error only if no data for 7 days
 
       - name: raw_stripe_disputes
         description: "Raw Stripe disputes (chargebacks)."
+        freshness:
+          warn_after:  {count: 72, period: hour}
+          error_after: {count: 168, period: hour}
 
       - name: raw_stripe_payouts
         description: "Raw Stripe payouts to bank."
+        freshness: null   # payouts require an active bank account; skip until configured
 
       - name: raw_fx_rates
         description: "Daily FX exchange rates from external API."
