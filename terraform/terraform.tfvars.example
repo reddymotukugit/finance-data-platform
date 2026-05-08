@@ -1,0 +1,17 @@
+# Copy this to terraform.tfvars and fill in your values
+# NEVER commit terraform.tfvars to git
+
+environment = "dev"
+
+# ── Snowflake ──────────────────────────────────────────────────────────────────
+snowflake_account    = "orgname-accountname"   # e.g. pdriyqm-bt31389
+snowflake_username   = "your-accountadmin-user"
+snowflake_password   = "your-accountadmin-password"
+dbt_user_password    = "your-dbt-user-password"
+airflow_user_password = "your-airflow-user-password"
+
+# ── Azure ──────────────────────────────────────────────────────────────────────
+azure_subscription_id      = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+azure_location             = "eastus"
+azure_resource_group_name  = "rg-finance-data-platform-dev"
+azure_storage_account_name = "stfinancereddy001"
