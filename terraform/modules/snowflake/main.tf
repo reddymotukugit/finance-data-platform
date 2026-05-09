@@ -22,17 +22,17 @@ resource "snowflake_warehouse" "transform" {
 }
 
 # ── Roles ─────────────────────────────────────────────────────────────────────
-resource "snowflake_role" "loader" {
+resource "snowflake_account_role" "loader" {
   name    = "FINANCE_LOADER"
   comment = "Loads raw data from ADLS stages into RAW schema"
 }
 
-resource "snowflake_role" "transformer" {
+resource "snowflake_account_role" "transformer" {
   name    = "FINANCE_TRANSFORMER"
   comment = "Runs dbt transformations across Bronze, Silver, Gold"
 }
 
-resource "snowflake_role" "analyst" {
+resource "snowflake_account_role" "analyst" {
   name    = "FINANCE_ANALYST"
   comment = "Read-only access to Gold schema for BI tools"
 }
@@ -72,7 +72,7 @@ resource "snowflake_schema" "audit" {
 resource "snowflake_user" "dbt" {
   name         = "FINANCE_DBT_USER"
   password     = var.dbt_user_password
-  default_role = snowflake_role.transformer.name
+  default_role = snowflake_account_role.transformer.name
   comment      = "Service account for dbt transformations"
 
   must_change_password = false
@@ -81,7 +81,7 @@ resource "snowflake_user" "dbt" {
 resource "snowflake_user" "airflow" {
   name         = "FINANCE_AIRFLOW_USER"
   password     = var.airflow_user_password
-  default_role = snowflake_role.transformer.name
+  default_role = snowflake_account_role.transformer.name
   comment      = "Service account for Airflow orchestration"
 
   must_change_password = false
