@@ -3,227 +3,184 @@
 [![dbt CI](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/dbt-ci.yml/badge.svg)](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/dbt-ci.yml)
 [![dbt Docs](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/dbt-docs.yml/badge.svg)](https://reddymotukugit.github.io/finance-data-platform/)
 [![Terraform CI](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/terraform-ci.yml/badge.svg)](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/terraform-ci.yml)
+[![Python Lint](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/python-lint.yml/badge.svg)](https://github.com/reddymotukugit/finance-data-platform/actions/workflows/python-lint.yml)
 
-A production-grade financial data pipeline built on **Azure ADLS Gen2 · Snowflake · dbt · Apache Airflow**.
+A **production-grade financial data pipeline** built on Azure ADLS Gen2 · Snowflake · dbt · Apache Airflow.
 
-Ingests Stripe financial events daily, transforms them through a Bronze → Silver → Gold medallion architecture, and delivers clean, analytics-ready fact and dimension tables for revenue reporting and MRR tracking.
+Ingests 9 Stripe financial entities daily, transforms them through a **Bronze → Silver → Gold medallion architecture**, and delivers clean, analytics-ready fact and dimension tables for revenue reporting, MRR tracking, and financial reconciliation.
+
+---
+
+## At a Glance
+
+| | |
+|---|---|
+| **Stripe entities ingested** | 9 — charges, refunds, disputes, payouts, invoices, customers, balance transactions, prices, products |
+| **dbt models** | 27 — 8 Bronze · 7 Silver · 12 Gold |
+| **Airflow tasks** | 26 per daily run |
+| **Pipeline schedule** | 1:30 AM AEST (15:30 UTC) |
+| **Environments** | dev · test · prod (Terraform IaC, Azure remote state) |
+| **CI/CD workflows** | 4 GitHub Actions workflows |
 
 ---
 
 ## Architecture
 
-```
-Stripe API
-    │
-    ▼
-Azure ADLS Gen2          (Parquet landing zone — one folder per entity)
-    │
-    ▼  COPY INTO
-Snowflake RAW schema     (Bronze: raw tables, exact copy of source)
-    │
-    ▼  dbt incremental
-Snowflake SILVER schema  (Cleaned, deduplicated, FX-normalized)
-    │
-    ▼  dbt incremental
-Snowflake GOLD schema    (Fact & dimension tables — analytics-ready)
-    │
-    ▼
-BI Tools / Reports       (FCT_TRANSACTIONS · FCT_MRR_MOVEMENTS · DIM_CUSTOMERS)
-```
+```mermaid
+flowchart TD
+    subgraph SRC["☁️  Data Source"]
+        STRIPE["Stripe API\nCharges · Refunds · Disputes\nPayouts · Invoices · Customers\nBalance Txns · Prices · Products"]
+    end
 
-**Orchestration:** Apache Airflow (Docker · LocalExecutor) runs the full pipeline daily at 02:00 UTC.
+    subgraph ING["🐍  Ingestion  ·  Python 3.11"]
+        PY["stripe_to_adls.py\nREST → Parquet · Snappy"]
+    end
+
+    subgraph AZ["🗄️  Azure ADLS Gen2"]
+        ADLS["landing/stripe/{entity}/\nlanding/fx/rates/\narchive/"]
+    end
+
+    subgraph SF["❄️  Snowflake"]
+        RAW["RAW Schema\nCOPY INTO from External Stage"]
+        BRONZE["BRONZE Schema  ·  8 models\nTyped · Flattened · Validated"]
+        SILVER["SILVER Schema  ·  7 models\nDeduped · FX-normalised · USD"]
+        GOLD["GOLD Schema  ·  12 models\n6 Facts  ·  6 Dimensions"]
+    end
+
+    subgraph BI["📊  Consumers"]
+        TOOLS["BI Tools\nPower BI · Metabase · SQL"]
+    end
+
+    STRIPE -->|"REST API  ·  incremental watermark"| PY
+    PY -->|"Parquet  ·  Snappy"| ADLS
+    ADLS -->|"COPY INTO  ·  external stage"| RAW
+    RAW -->|"dbt incremental append"| BRONZE
+    BRONZE -->|"dbt incremental MERGE"| SILVER
+    SILVER -->|"dbt incremental MERGE"| GOLD
+    GOLD --> TOOLS
+
+    AF["⚙️ Apache Airflow\n26-task DAG · 1:30 AM AEST"] -. "orchestrates" .-> PY
+    AF -. "orchestrates" .-> RAW
+    TF["🏗️ Terraform IaC\ndev · test · prod\nAzure Remote State"] -. "provisions" .-> SF
+    TF -. "provisions" .-> AZ
+    GH["🔄 GitHub Actions\n4 CI/CD workflows"] -. "validates" .-> BRONZE
+```
 
 ---
 
-## Stack
+## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Source | Stripe API (balance transactions, invoices, customers, subscriptions) |
-| Storage | Azure ADLS Gen2 (Parquet, Snappy compression) |
-| Warehouse | Snowflake (multi-role RBAC, separate transformer / loader roles) |
-| Transformation | dbt 1.7 (incremental models, surrogate keys, FX normalization) |
-| Orchestration | Apache Airflow 2.x (Docker Compose, LocalExecutor) |
-| CI/CD | GitHub Actions (dbt test on PR · dbt docs on merge) |
-| Language | Python 3.11, SQL |
+| Layer | Technology | Detail |
+|---|---|---|
+| **Source** | Stripe API | 9 entities, incremental watermark ingestion |
+| **Ingestion** | Python 3.11 | `stripe_to_adls.py` — REST → Parquet → ADLS |
+| **Storage** | Azure ADLS Gen2 | Parquet + Snappy, partitioned by entity |
+| **Warehouse** | Snowflake | Multi-role RBAC, separate ingest / transform warehouses |
+| **Transformation** | dbt 1.7 | Incremental models, surrogate keys, FX normalisation |
+| **Orchestration** | Apache Airflow 2.x | Docker Compose, LocalExecutor, 26-task DAG |
+| **IaC** | Terraform | dev / test / prod environments, Azure remote state |
+| **CI/CD** | GitHub Actions | 4 workflows — lint, test, validate, publish docs |
+| **Language** | Python 3.11, SQL, HCL | |
 
 ---
 
 ## dbt Models
 
-### Bronze (4 models) — raw copy from Snowflake RAW tables
-| Model | Source |
+### Bronze — 8 models · Raw typed views over RAW schema
+
+| Model | Stripe Entity |
 |---|---|
-| `brz_stripe_balance_transactions` | Stripe balance transactions |
-| `brz_stripe_invoice_line_items` | Stripe invoice line items |
-| `brz_stripe_customers` | Stripe customers |
+| `brz_stripe_charges` | Charges |
+| `brz_stripe_refunds` | Refunds |
+| `brz_stripe_disputes` | Disputes |
+| `brz_stripe_payouts` | Payouts |
+| `brz_stripe_customers` | Customers |
+| `brz_stripe_invoice_line_items` | Invoice line items |
+| `brz_stripe_balance_transactions` | Balance transactions |
 | `brz_fx_rates` | FX rates (USD base) |
 
-### Silver (3 models) — cleaned, deduplicated, FX-normalized
-| Model | Grain | Key logic |
+### Silver — 7 models · Cleaned, deduped, FX-normalised
+
+| Model | Grain | Key transformations |
 |---|---|---|
-| `stg_finance_ledger_events` | 1 row per transaction | Cents→USD, FX join, sign normalization, dedup |
-| `stg_invoice_line_items` | 1 row per line item | MRR normalization (annual→monthly), FX join |
+| `stg_charges` | 1 row per charge | Cents→USD, FX join, dedup, status normalisation |
+| `stg_refunds` | 1 row per refund | Cents→USD, FX join, signed amounts |
+| `stg_disputes` | 1 row per dispute | Status normalisation, signed amounts |
+| `stg_payouts` | 1 row per payout | Arrival date, bank reconciliation ready |
+| `stg_invoice_line_items` | 1 row per line item | MRR normalisation (annual→monthly) |
+| `stg_finance_ledger_events` | 1 row per ledger event | Full ledger with sign convention |
 | `stg_customers_history` | 1 row per customer | SCD-style latest snapshot |
 
-### Gold (4 models) — analytics-ready facts and dimensions
-| Model | Grain | Description |
-|---|---|---|
-| `fct_transactions` | 1 row per transaction | Full ledger with customer + date dims |
-| `fct_mrr_movements` | 1 row per customer/plan/month | MRR with New / Expansion / Contraction / Churn classification |
-| `dim_customers` | 1 row per customer | Current customer attributes |
-| `dim_dates` | 1 row per calendar day | Date spine 2018–2031 |
+### Gold — 12 models · 6 Facts + 6 Dimensions
 
-**Tests:** 26 tests covering uniqueness, not-null, and accepted-values across all gold models.
-
----
-
-## Project Structure
-
-```
-finance-data-platform/
-├── airflow/
-│   ├── dags/
-│   │   └── finance_daily_dag.py     # Master DAG — 21 tasks end-to-end
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   └── requirements.txt
-├── dbt/
-│   ├── models/
-│   │   ├── bronze/
-│   │   ├── silver/
-│   │   └── gold/
-│   ├── macros/
-│   │   └── generate_schema_name.sql # Ensures BRONZE/SILVER/GOLD (not BRONZE_BRONZE)
-│   ├── packages.yml
-│   └── dbt_project.yml
-├── scripts/
-│   └── stripe_to_adls.py            # Stripe → Azure ADLS Gen2 ingestion
-├── setup/
-│   ├── azure/
-│   │   └── setup_azure.sh           # Azure storage account + container setup
-│   └── snowflake/
-│       ├── 01_schemas_warehouses_roles.sql
-│       ├── 02_raw_tables.sql
-│       ├── 03_audit_tables.sql
-│       ├── 04_storage_integration.sql
-│       └── 05_create_stages.sql
-├── docs/
-│   └── 2_DAY_EXECUTION_PLAN.md
-├── .env.example
-├── .gitignore
-└── README.md
-```
+| Model | Type | Grain | Description |
+|---|---|---|---|
+| `fct_transactions` | Fact | Per transaction | Full ledger with customer + date dims |
+| `fct_charges` | Fact | Per charge | Revenue with payment method breakdown |
+| `fct_refunds` | Fact | Per refund | Refund analysis with reason |
+| `fct_disputes` | Fact | Per dispute | Dispute tracking and outcomes |
+| `fct_payouts` | Fact | Per payout | Bank payout reconciliation |
+| `fct_mrr_movements` | Fact | Per customer/month | MRR — New · Expansion · Contraction · Churn |
+| `dim_customers` | Dimension | Per customer | Current customer attributes |
+| `dim_dates` | Dimension | Per calendar day | Date spine 2018–2031 |
+| `dim_currencies` | Dimension | Per currency | FX rates and currency metadata |
+| `dim_plans` | Dimension | Per plan | Subscription plan attributes |
+| `dim_payment_category` | Dimension | Per category | Payment method categories |
+| `dim_geography` | Dimension | Per region | Geographic mapping |
 
 ---
 
 ## Airflow DAG — `finance_data_platform_daily`
 
+26 tasks · runs daily at **1:30 AM AEST** (15:30 UTC)
+
 ```
 create_run_id
     │
-    ├── ingest_balance_transactions ──► copy_into_raw_balance_transactions ──┐
-    ├── ingest_charges              ──► copy_into_raw_charges               ──┤
-    ├── ingest_customers            ──► copy_into_raw_customers             ──┤──► dbt_run_bronze
-    ├── ingest_subscriptions        ──► copy_into_raw_subscriptions         ──┤        │
-    ├── ingest_invoices             ──► copy_into_raw_invoices              ──┤    dbt_run_silver
-    └── ingest_invoice_line_items   ──► copy_into_raw_invoice_line_items    ──┘        │
-                                                                               dbt_test_silver
-                                                                                       │
-                                                                               dbt_run_gold
-                                                                                       │
-                                                                               dbt_test_gold
-                                                                                       │
+    ├── ingest_charges              ──► copy_into_raw_charges               ──┐
+    ├── ingest_refunds              ──► copy_into_raw_refunds                ──┤
+    ├── ingest_disputes             ──► copy_into_raw_disputes               ──┤
+    ├── ingest_payouts              ──► copy_into_raw_payouts                ──┤──► dbt_run_bronze
+    ├── ingest_customers            ──► copy_into_raw_customers              ──┤         │
+    ├── ingest_invoices             ──► copy_into_raw_invoices               ──┤    dbt_test_bronze
+    ├── ingest_invoice_line_items   ──► copy_into_raw_invoice_line_items     ──┤         │
+    ├── ingest_balance_transactions ──► copy_into_raw_balance_transactions   ──┘    dbt_run_silver
+    └── ingest_fx_rates                                                                  │
+                                                                                   dbt_test_silver
+                                                                                         │
+                                                                                    dbt_run_gold
+                                                                                         │
+                                                                                   dbt_test_gold
+                                                                                         │
                                                                           finance_reconciliation_checks
-                                                                                       │
-                                                                               update_watermarks
-                                                                                       │
-                                                                          send_success_notification
+                                                                                         │
+                                                                                 update_watermarks
+                                                                                         │
+                                                                            send_success_notification
 ```
 
 ---
 
-## Local Setup
+## Terraform — Infrastructure as Code
 
-### Prerequisites
-- Docker Desktop
-- Python 3.11+
-- Snowflake account
-- Azure storage account
-- Stripe account (test mode is fine)
+Three environments managed with Terraform, state stored remotely in Azure Blob Storage.
 
-### 1. Clone the repo
+| Environment | Snowflake Warehouse | Storage Replication | Auto-suspend |
+|---|---|---|---|
+| `dev` | X-SMALL | LRS | 60s |
+| `test` | SMALL | LRS | 120s |
+| `prod` | MEDIUM | GRS | 300s |
 
-```bash
-git clone https://github.com/<your-username>/finance-data-platform.git
-cd finance-data-platform
-```
-
-### 2. Configure environment variables
+Resources provisioned per environment: Snowflake database, 5 schemas (RAW / BRONZE / SILVER / GOLD / AUDIT), 2 warehouses, 3 roles, 2 service accounts, Azure resource group, ADLS Gen2 storage account, blob container, and full landing zone folder structure.
 
 ```bash
-cp .env.example .env
-# Edit .env with your actual credentials
+# Plan any environment safely (no changes applied)
+cd terraform/environments/dev
+terraform init -reconfigure
+terraform plan -var-file=terraform.tfvars
 ```
 
-### 3. Set up Snowflake
-
-Run the setup scripts in order against your Snowflake account:
-
-```bash
-# In Snowflake worksheet, run in order:
-setup/snowflake/01_schemas_warehouses_roles.sql
-setup/snowflake/02_raw_tables.sql
-setup/snowflake/03_audit_tables.sql
-setup/snowflake/04_storage_integration.sql
-setup/snowflake/05_create_stages.sql
-```
-
-### 4. Set up Azure storage
-
-```bash
-chmod +x setup/azure/setup_azure.sh
-./setup/azure/setup_azure.sh
-```
-
-### 5. Start Airflow
-
-```bash
-cd airflow
-cp ../.env .env           # Docker Compose reads .env from this directory
-docker compose up -d
-```
-
-Airflow UI: http://localhost:8080 (admin / admin)
-
-### 6. Add Snowflake connection in Airflow
-
-Admin → Connections → Add:
-
-| Field | Value |
-|---|---|
-| Connection ID | `snowflake_finance` |
-| Connection Type | `Snowflake` |
-| Account | `<your-account>` e.g. `orgname-accountname` |
-| Login | `FINANCE_AIRFLOW_USER` |
-| Password | your password |
-| Database | `FINANCE_PLATFORM_DEV` |
-| Schema | `RAW` |
-| Warehouse | `FINANCE_TRANSFORM_WH` |
-| Role | `FINANCE_TRANSFORMER` |
-
-### 7. Trigger the DAG
-
-In the Airflow UI, unpause `finance_data_platform_daily` and trigger a manual run. All 21 tasks should complete green in ~5 minutes.
-
-### 8. Run dbt manually (optional)
-
-```bash
-cd dbt
-dbt deps
-dbt run --select tag:silver tag:gold
-dbt test
-```
+Remote state: `stterraformreddy001 / tfstate / finance-platform/{env}/terraform.tfstate`
 
 ---
 
@@ -231,49 +188,109 @@ dbt test
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| `dbt-ci.yml` | Pull request to `main` | Compiles dbt, runs all 26 tests against Snowflake dev target |
+| `dbt-ci.yml` | PR touching `dbt/` | Compiles and runs all dbt models + tests against Snowflake dev |
+| `terraform-ci.yml` | PR or push to `main` | `terraform fmt` check + `terraform validate` across all 3 environments |
+| `python-lint.yml` | PR touching `scripts/` or `airflow/` | `flake8` — catches syntax errors and undefined names |
 | `dbt-docs.yml` | Push to `main` | Generates dbt docs and publishes to GitHub Pages |
 
-CI requires these GitHub secrets:
+Required GitHub Secrets: `SNOWFLAKE_ACCOUNT` · `SNOWFLAKE_USER` · `SNOWFLAKE_PASSWORD` · `SNOWFLAKE_ROLE` · `SNOWFLAKE_WAREHOUSE` · `SNOWFLAKE_DATABASE`
+
+**[📖 Live dbt Docs →](https://reddymotukugit.github.io/finance-data-platform/)**
+
+---
+
+## Project Structure
 
 ```
-SNOWFLAKE_ACCOUNT
-SNOWFLAKE_USER
-SNOWFLAKE_PASSWORD
-SNOWFLAKE_ROLE
-SNOWFLAKE_WAREHOUSE
-SNOWFLAKE_DATABASE
+finance-data-platform/
+├── .github/workflows/
+│   ├── dbt-ci.yml                       # dbt compile + run + test on PR
+│   ├── dbt-docs.yml                     # Publish dbt docs to GitHub Pages
+│   ├── terraform-ci.yml                 # fmt + validate on PR, plan/apply on dispatch
+│   └── python-lint.yml                  # flake8 on ingestion + DAG files
+├── airflow/
+│   ├── dags/finance_daily_dag.py        # 26-task production DAG
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── requirements.txt
+├── dbt/
+│   ├── models/
+│   │   ├── bronze/                      # 8 models — typed views over RAW
+│   │   ├── silver/                      # 7 models — cleaned, deduped, FX-normalised
+│   │   └── gold/                        # 12 models — 6 facts + 6 dimensions
+│   ├── macros/generate_schema_name.sql  # Ensures BRONZE/SILVER/GOLD schema naming
+│   ├── profiles.yml.example
+│   └── dbt_project.yml
+├── scripts/
+│   └── stripe_to_adls.py               # Stripe → ADLS Gen2 — 9 entities, incremental
+├── setup/
+│   ├── azure/setup_azure.sh
+│   └── snowflake/                       # 5 SQL setup scripts (01 → 05)
+├── terraform/
+│   ├── environments/dev|test|prod/      # Per-environment config + tfvars
+│   └── modules/snowflake|azure/         # Reusable Terraform modules
+├── docs/DEPLOYMENT_GUIDE.md
+├── .env.example
+└── .gitignore
 ```
+
+---
+
+## Local Setup
+
+### Prerequisites
+- Docker Desktop, Python 3.11+, Snowflake account, Azure subscription, Stripe account
+
+### Steps
+
+```bash
+# 1. Clone
+git clone https://github.com/reddymotukugit/finance-data-platform.git
+cd finance-data-platform
+
+# 2. Environment variables
+cp .env.example .env
+# Edit .env with your credentials
+
+# 3. Snowflake setup — run in your Snowflake worksheet in order:
+# setup/snowflake/01_schemas_warehouses_roles.sql
+# setup/snowflake/02_raw_tables.sql
+# setup/snowflake/03_audit_tables.sql
+# setup/snowflake/04_storage_integration.sql
+# setup/snowflake/05_create_stages.sql
+
+# 4. Azure storage
+chmod +x setup/azure/setup_azure.sh && ./setup/azure/setup_azure.sh
+
+# 5. dbt profile
+cd dbt && cp profiles.yml.example profiles.yml
+# Edit profiles.yml with your Snowflake credentials
+
+# 6. Start Airflow
+cd ../airflow && cp ../.env .env && docker compose up -d
+# UI → http://localhost:8080  (admin / admin)
+```
+
+Add Snowflake connection in Airflow (Admin → Connections):
+`Connection ID: snowflake_finance` · `Database: FINANCE_PLATFORM_DEV` · `Warehouse: FINANCE_TRANSFORM_WH` · `Role: FINANCE_TRANSFORMER`
+
+Unpause `finance_data_platform_daily` and trigger a manual run — all 26 tasks should complete green in ~5–10 minutes.
 
 ---
 
 ## Key Design Decisions
 
-**Incremental models with `unique_key`** — All Silver and Gold models use dbt incremental strategy with MERGE, so daily runs only process new records rather than full table scans.
+**`raw_payload VARIANT` as source of truth** — Every RAW table stores the full Stripe JSON in a `raw_payload` VARIANT column. Bronze models extract fields using Snowflake's semi-structured access (`raw_payload:field::TYPE`), making the pipeline resilient to upstream schema changes.
 
-**QUALIFY for deduplication** — Raw tables can accumulate duplicates when COPY INTO stages have no prior load history. All Silver models use `QUALIFY ROW_NUMBER() OVER (PARTITION BY id ORDER BY loaded_at DESC) = 1` as a guard.
+**Incremental models with `unique_key`** — All Silver and Gold models use dbt's incremental MERGE strategy so daily runs only process new records, keeping Snowflake compute costs minimal.
 
-**FX normalization in Silver** — All amounts are converted to USD in the Silver layer using a deduplicated FX rates table, keeping Gold models simple and currency-agnostic.
+**`QUALIFY` for deduplication** — COPY INTO can land duplicates if a file is staged more than once. All Silver models use `QUALIFY ROW_NUMBER() OVER (PARTITION BY id ORDER BY loaded_at DESC) = 1` as a guard before the MERGE.
 
-**`generate_schema_name` macro** — Overrides dbt's default schema naming to land models in `BRONZE`, `SILVER`, `GOLD` rather than `BRONZE_BRONZE`, `BRONZE_SILVER` etc.
+**FX normalisation in Silver** — All monetary amounts are converted to USD in the Silver layer using a deduplicated FX rates table. Gold models stay simple and currency-agnostic.
 
-**Signed amount convention** — In `stg_finance_ledger_events`, refunds, disputes, and adjustments are stored as negative amounts. Charges and payouts are positive. This makes aggregations in Gold straightforward.
+**Signed amount convention** — Refunds, disputes, and adjustments are stored as negative amounts in `stg_finance_ledger_events`. Charges and payouts are positive. Makes aggregations in Gold straightforward.
 
----
-
-## Environment Variables Reference
-
-See `.env.example` for the full list. Key variables:
-
-| Variable | Description |
-|---|---|
-| `SNOWFLAKE_ACCOUNT` | Snowflake account identifier (e.g. `orgname-accountname`) |
-| `SNOWFLAKE_USER` | Airflow service account username |
-| `SNOWFLAKE_PASSWORD` | Airflow service account password |
-| `STRIPE_API_KEY` | Stripe secret key (`sk_test_...` for test mode) |
-| `AZURE_STORAGE_ACCOUNT` | Azure storage account name |
-| `AZURE_STORAGE_KEY` | Azure storage account access key |
-| `SLACK_WEBHOOK_URL` | Slack incoming webhook for pipeline alerts |
+**Sparse entity freshness** — Freshness checks are disabled (`freshness: null`) for prices and products (static reference data) and set to 72 h / 168 h for refunds and disputes (legitimately low-volume). Prevents false pipeline alerts.
 
 ---
 
