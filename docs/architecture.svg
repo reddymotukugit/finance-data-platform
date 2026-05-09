@@ -102,8 +102,7 @@
   <rect x="528" y="108" width="418" height="12" fill="#0369A1"/>
   <text x="552" y="102" fill="#fff" font-size="13">❄</text>
   <text x="568" y="102" fill="#fff" font-size="12" font-weight="700">Snowflake</text>
-  <text x="670" y="102" fill="#BAE6FD" font-size="10.5">Medallion Architecture  ·  dbt 1.7  ·  Incremental MERGE</text>
-  <text x="898" y="102" fill="#7DD3FC" font-size="9.5">Multi-role RBAC  ·  2 warehouses</text>
+  <text x="666" y="102" fill="#BAE6FD" font-size="10">Medallion Architecture  ·  dbt 1.7  ·  Incremental MERGE  ·  Multi-role RBAC  ·  2 warehouses</text>
 
   <!-- RAW sub-box (x=540, w=84, y=120, h=182) -->
   <rect x="540" y="120" width="84" height="182" rx="5" fill="#fff" stroke="#CBD5E1" stroke-width="1.2"/>
@@ -117,7 +116,6 @@
   <text x="582" y="214" text-anchor="middle" fill="#64748B" font-size="8.5">Append-only</text>
   <text x="582" y="229" text-anchor="middle" fill="#94A3B8" font-size="8">Schema-resilient</text>
   <text x="582" y="242" text-anchor="middle" fill="#94A3B8" font-size="8">Source of truth</text>
-  <text x="582" y="295" text-anchor="middle" fill="#94A3B8" font-size="7.5" font-style="italic">RAW schema</text>
 
   <!-- Arrow RAW→BRZ -->
   <line x1="624" y1="211" x2="638" y2="211" stroke="#D97706" stroke-width="1.5"/>
@@ -140,7 +138,6 @@
   <text x="696" y="266" text-anchor="middle" fill="#B45309" font-size="8">brz_invoices</text>
   <text x="696" y="278" text-anchor="middle" fill="#B45309" font-size="8">brz_balance_txns</text>
   <text x="696" y="290" text-anchor="middle" fill="#B45309" font-size="8">brz_fx_rates</text>
-  <text x="696" y="295" text-anchor="middle" fill="#94A3B8" font-size="7.5" font-style="italic">BRONZE schema</text>
 
   <!-- Arrow BRZ→SLV -->
   <line x1="746" y1="211" x2="760" y2="211" stroke="#475569" stroke-width="1.5"/>
@@ -162,7 +159,6 @@
   <text x="818" y="254" text-anchor="middle" fill="#64748B" font-size="8">stg_invoice_line_items</text>
   <text x="818" y="266" text-anchor="middle" fill="#64748B" font-size="8">stg_ledger_events</text>
   <text x="818" y="278" text-anchor="middle" fill="#64748B" font-size="8">stg_customers_history</text>
-  <text x="818" y="295" text-anchor="middle" fill="#94A3B8" font-size="7.5" font-style="italic">SILVER schema</text>
 
   <!-- Arrow SLV→GLD -->
   <line x1="868" y1="211" x2="882" y2="211" stroke="#CA8A04" stroke-width="1.5"/>
@@ -186,7 +182,6 @@
   <text x="914" y="270" text-anchor="middle" fill="#B45309" font-size="7.5">customers</text>
   <text x="914" y="281" text-anchor="middle" fill="#B45309" font-size="7.5">dates · fx</text>
   <text x="914" y="292" text-anchor="middle" fill="#B45309" font-size="7.5">plans · geo</text>
-  <text x="914" y="295" text-anchor="middle" fill="#94A3B8" font-size="7" font-style="italic"> </text>
 
   <!-- Arrow 4: Snowflake → Consumers -->
   <line x1="946" y1="197" x2="972" y2="197" stroke="#CBD5E1" stroke-width="1.5"/>
