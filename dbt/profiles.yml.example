@@ -1,0 +1,14 @@
+finance_data_platform:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "your-snowflake-account"
+      user: "FINANCE_DBT_USER"
+      password: "your-dbt-user-password"
+      role: FINANCE_TRANSFORMER
+      warehouse: FINANCE_TRANSFORM_WH
+      database: FINANCE_PLATFORM_DEV
+      schema: BRONZE
+      threads: 4
+      client_session_keep_alive: false
