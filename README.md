@@ -26,45 +26,7 @@ Ingests 9 Stripe financial entities daily, transforms them through a **Bronze �
 
 ## Architecture
 
-```mermaid
-flowchart TD
-    subgraph SRC["☁️  Data Source"]
-        STRIPE["Stripe API\nCharges · Refunds · Disputes\nPayouts · Invoices · Customers\nBalance Txns · Prices · Products"]
-    end
-
-    subgraph ING["🐍  Ingestion  ·  Python 3.11"]
-        PY["stripe_to_adls.py\nREST → Parquet · Snappy"]
-    end
-
-    subgraph AZ["🗄️  Azure ADLS Gen2"]
-        ADLS["landing/stripe/{entity}/\nlanding/fx/rates/\narchive/"]
-    end
-
-    subgraph SF["❄️  Snowflake"]
-        RAW["RAW Schema\nCOPY INTO from External Stage"]
-        BRONZE["BRONZE Schema  ·  8 models\nTyped · Flattened · Validated"]
-        SILVER["SILVER Schema  ·  7 models\nDeduped · FX-normalised · USD"]
-        GOLD["GOLD Schema  ·  12 models\n6 Facts  ·  6 Dimensions"]
-    end
-
-    subgraph BI["📊  Consumers"]
-        TOOLS["BI Tools\nPower BI · Metabase · SQL"]
-    end
-
-    STRIPE -->|"REST API  ·  incremental watermark"| PY
-    PY -->|"Parquet  ·  Snappy"| ADLS
-    ADLS -->|"COPY INTO  ·  external stage"| RAW
-    RAW -->|"dbt incremental append"| BRONZE
-    BRONZE -->|"dbt incremental MERGE"| SILVER
-    SILVER -->|"dbt incremental MERGE"| GOLD
-    GOLD --> TOOLS
-
-    AF["⚙️ Apache Airflow\n26-task DAG · 1:30 AM AEST"] -. "orchestrates" .-> PY
-    AF -. "orchestrates" .-> RAW
-    TF["🏗️ Terraform IaC\ndev · test · prod\nAzure Remote State"] -. "provisions" .-> SF
-    TF -. "provisions" .-> AZ
-    GH["🔄 GitHub Actions\n4 CI/CD workflows"] -. "validates" .-> BRONZE
-```
+![Finance Data Platform Architecture](docs/architecture.svg)
 
 ---
 
