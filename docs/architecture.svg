@@ -1,340 +1,349 @@
-<svg viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',Arial,sans-serif">
-  <defs>
-    <marker id="ah" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#475569"/></marker>
-    <marker id="ah-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7C3AED"/></marker>
-    <marker id="ah-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2563EB"/></marker>
-    <marker id="ah-cyan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0284C7"/></marker>
-    <marker id="ah-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#059669"/></marker>
-    <marker id="ah-amber" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#CA8A04"/></marker>
-    <marker id="ah-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#D97706"/></marker>
-    <marker id="ah-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#94A3B8"/></marker>
-  </defs>
+<svg viewBox="0 0 1200 628" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',Arial,sans-serif">
 
   <!-- Background -->
-  <rect width="1200" height="820" fill="#F8FAFC" rx="0"/>
+  <rect width="1200" height="628" fill="#FFFFFF"/>
+  <rect width="1200" height="5" fill="#2563EB"/>
 
-  <!-- ── HEADER ── -->
-  <rect width="1200" height="62" fill="#0F172A"/>
-  <text x="32" y="24" fill="#F1F5F9" font-size="18" font-weight="700">Finance Data Platform</text>
-  <text x="32" y="44" fill="#64748B" font-size="11">Azure ADLS Gen2 · Snowflake · dbt 1.7 · Apache Airflow 2.x · Terraform IaC · GitHub Actions CI/CD</text>
-  <!-- badges -->
-  <rect x="900" y="14" width="88" height="22" rx="11" fill="#022c22" stroke="#059669" stroke-width="1"/>
-  <text x="944" y="29" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">✓ CI PASSING</text>
-  <rect x="998" y="14" width="76" height="22" rx="11" fill="#0c1a2e" stroke="#2563EB" stroke-width="1"/>
-  <text x="1036" y="29" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700">27 MODELS</text>
-  <rect x="1084" y="14" width="84" height="22" rx="11" fill="#1c0800" stroke="#ea580c" stroke-width="1"/>
-  <text x="1126" y="29" text-anchor="middle" fill="#fb923c" font-size="10" font-weight="700">26 AF TASKS</text>
+  <!-- ═══════ HEADER (y 5–77) ═══════ -->
+  <rect x="0" y="5" width="1200" height="72" fill="#F8FAFC"/>
+  <line x1="0" y1="77" x2="1200" y2="77" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="32" y="38" fill="#0F172A" font-size="22" font-weight="800" letter-spacing="-0.3">Finance Data Platform</text>
+  <text x="32" y="60" fill="#64748B" font-size="11">Stripe API · Python 3.11 · Azure ADLS Gen2 · Snowflake · dbt 1.7 · Apache Airflow · Terraform · GitHub Actions</text>
+  <!-- Badges -->
+  <rect x="746" y="20" width="100" height="22" rx="4" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="796" y="35" text-anchor="middle" fill="#15803D" font-size="10" font-weight="700">✓  CI Passing</text>
+  <rect x="854" y="20" width="88" height="22" rx="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/>
+  <text x="898" y="35" text-anchor="middle" fill="#1D4ED8" font-size="10" font-weight="700">27 dbt Models</text>
+  <rect x="950" y="20" width="106" height="22" rx="4" fill="#FEF9C3" stroke="#CA8A04" stroke-width="1"/>
+  <text x="1003" y="35" text-anchor="middle" fill="#92400E" font-size="10" font-weight="700">9 Entities · Daily</text>
+  <rect x="1064" y="20" width="104" height="22" rx="4" fill="#F3E8FF" stroke="#9333EA" stroke-width="1"/>
+  <text x="1116" y="35" text-anchor="middle" fill="#7E22CE" font-size="10" font-weight="700">Terraform IaC</text>
 
-  <!-- ════════════════════════════════════════════ -->
-  <!--  LANE 1 — SOURCE                            -->
-  <!-- ════════════════════════════════════════════ -->
-  <rect x="16" y="74" width="1168" height="108" rx="10" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1.2"/>
-  <rect x="16" y="68" width="76" height="18" rx="9" fill="#7C3AED"/>
-  <text x="54" y="80" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">01 · SOURCE</text>
+  <!-- ═══════════════════════════════════════════ -->
+  <!--   PIPELINE ROW  (y 84–310)                 -->
+  <!-- ═══════════════════════════════════════════ -->
 
-  <!-- Stripe card -->
-  <rect x="30" y="88" width="148" height="82" rx="8" fill="#fff" stroke="#635BFF" stroke-width="1.5"/>
-  <rect x="30" y="88" width="148" height="28" rx="8" fill="#635BFF"/>
-  <rect x="30" y="104" width="148" height="12" fill="#635BFF"/>
-  <text x="104" y="106" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Stripe API</text>
-  <text x="104" y="127" text-anchor="middle" fill="#64748B" font-size="9.5">9 entities · incremental watermark</text>
-  <text x="104" y="141" text-anchor="middle" fill="#64748B" font-size="9.5">REST API v3 · full pagination</text>
-  <rect x="94" y="156" width="60" height="10" rx="5" fill="#EEF2FF"/>
-  <text x="124" y="164" text-anchor="middle" fill="#4338CA" font-size="8" font-weight="700">REST · v3 API</text>
+  <!-- ── 1. STRIPE (x=32, w=138, y=88, h=218) ── -->
+  <rect x="32" y="88" width="138" height="218" rx="6" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/>
+  <rect x="32" y="88" width="138" height="40" rx="6" fill="#4F46E5"/>
+  <rect x="32" y="116" width="138" height="12" fill="#4F46E5"/>
+  <rect x="44" y="96" width="24" height="24" rx="4" fill="rgba(255,255,255,0.2)"/>
+  <text x="56" y="113" text-anchor="middle" fill="#fff" font-size="14" font-weight="900">S</text>
+  <text x="116" y="107" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Stripe</text>
+  <text x="116" y="121" text-anchor="middle" fill="#C7D2FE" font-size="9">REST API  ·  v3</text>
+  <!-- Body -->
+  <text x="101" y="148" text-anchor="middle" fill="#312E81" font-size="10" font-weight="700">9 Entities ingested</text>
+  <text x="101" y="164" text-anchor="middle" fill="#4338CA" font-size="9">charges</text>
+  <text x="101" y="177" text-anchor="middle" fill="#4338CA" font-size="9">refunds</text>
+  <text x="101" y="190" text-anchor="middle" fill="#4338CA" font-size="9">disputes</text>
+  <text x="101" y="203" text-anchor="middle" fill="#4338CA" font-size="9">payouts</text>
+  <text x="101" y="216" text-anchor="middle" fill="#4338CA" font-size="9">invoices</text>
+  <text x="101" y="229" text-anchor="middle" fill="#4338CA" font-size="9">customers</text>
+  <text x="101" y="242" text-anchor="middle" fill="#4338CA" font-size="9">balance_txns</text>
+  <text x="101" y="255" text-anchor="middle" fill="#4338CA" font-size="9">prices · products</text>
+  <rect x="46" y="268" width="108" height="18" rx="9" fill="#E0E7FF"/>
+  <text x="100" y="280" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">incremental watermark</text>
 
-  <!-- Entity pills -->
-  <rect x="198" y="92" width="62" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="229" y="103" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">charges</text>
-  <rect x="266" y="92" width="58" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="295" y="103" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">refunds</text>
-  <rect x="330" y="92" width="60" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="360" y="103" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">disputes</text>
-  <rect x="396" y="92" width="56" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="424" y="103" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">payouts</text>
-  <rect x="458" y="92" width="56" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="486" y="103" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">invoices</text>
-  <rect x="198" y="114" width="72" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="234" y="125" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">customers</text>
-  <rect x="276" y="114" width="90" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="321" y="125" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">balance_txns</text>
-  <rect x="372" y="114" width="50" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="397" y="125" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">prices</text>
-  <rect x="428" y="114" width="64" height="16" rx="8" fill="#EEF2FF"/>
-  <text x="460" y="125" text-anchor="middle" fill="#4338CA" font-size="9" font-weight="600">products</text>
-  <rect x="198" y="136" width="58" height="16" rx="8" fill="#F3E8FF"/>
-  <text x="227" y="147" text-anchor="middle" fill="#7C3AED" font-size="9" font-weight="600">fx_rates</text>
+  <!-- Arrow 1 -->
+  <line x1="170" y1="197" x2="196" y2="197" stroke="#CBD5E1" stroke-width="1.5"/>
+  <polygon points="196,193 204,197 196,201" fill="#CBD5E1"/>
+  <text x="182" y="190" text-anchor="middle" fill="#94A3B8" font-size="8.5" font-weight="600">REST</text>
 
-  <!-- ════════════════════════════════════════════ -->
-  <!--  LANE 2 — INGESTION                         -->
-  <!-- ════════════════════════════════════════════ -->
-  <rect x="16" y="194" width="1168" height="98" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2"/>
-  <rect x="16" y="188" width="84" height="18" rx="9" fill="#2563EB"/>
-  <text x="58" y="200" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">02 · INGEST</text>
+  <!-- ── 2. PYTHON (x=204, w=120, y=108, h=198) ── -->
+  <rect x="204" y="108" width="120" height="198" rx="6" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.5"/>
+  <rect x="204" y="108" width="120" height="40" rx="6" fill="#2563EB"/>
+  <rect x="204" y="136" width="120" height="12" fill="#2563EB"/>
+  <rect x="214" y="116" width="24" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+  <text x="226" y="133" text-anchor="middle" fill="#fff" font-size="11" font-weight="900">Py</text>
+  <text x="274" y="127" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Python 3.11</text>
+  <text x="274" y="141" text-anchor="middle" fill="#BFDBFE" font-size="9">Ingestion layer</text>
+  <!-- Body -->
+  <text x="264" y="165" text-anchor="middle" fill="#1D4ED8" font-size="9.5" font-weight="600">stripe_to_adls.py</text>
+  <text x="264" y="182" text-anchor="middle" fill="#3B82F6" font-size="9">REST → Parquet</text>
+  <text x="264" y="197" text-anchor="middle" fill="#3B82F6" font-size="9">Snappy compressed</text>
+  <text x="264" y="212" text-anchor="middle" fill="#3B82F6" font-size="9">Date partitioned</text>
+  <text x="264" y="227" text-anchor="middle" fill="#3B82F6" font-size="9">9 parallel writers</text>
+  <rect x="216" y="240" width="96" height="18" rx="9" fill="#DBEAFE"/>
+  <text x="264" y="252" text-anchor="middle" fill="#1D4ED8" font-size="9" font-weight="600">incremental logic</text>
 
-  <!-- Arrow source→ingest -->
-  <line x1="104" y1="182" x2="104" y2="192" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#ah-purple)"/>
+  <!-- Arrow 2 -->
+  <line x1="324" y1="197" x2="350" y2="197" stroke="#CBD5E1" stroke-width="1.5"/>
+  <polygon points="350,193 358,197 350,201" fill="#CBD5E1"/>
+  <text x="337" y="190" text-anchor="middle" fill="#94A3B8" font-size="8.5" font-weight="600">Parquet</text>
 
-  <!-- Python card -->
-  <rect x="30" y="207" width="148" height="72" rx="8" fill="#fff" stroke="#3776AB" stroke-width="1.5"/>
-  <rect x="30" y="207" width="148" height="24" rx="8" fill="#3776AB"/>
-  <rect x="30" y="219" width="148" height="12" fill="#3776AB"/>
-  <text x="104" y="223" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Python 3.11</text>
-  <text x="104" y="244" text-anchor="middle" fill="#64748B" font-size="9.5">stripe_to_adls.py</text>
-  <text x="104" y="257" text-anchor="middle" fill="#64748B" font-size="9.5">Incremental watermark</text>
-  <text x="104" y="270" text-anchor="middle" fill="#64748B" font-size="9.5">REST → Parquet · Snappy</text>
+  <!-- ── 3. AZURE ADLS (x=358, w=136, y=108, h=198) ── -->
+  <rect x="358" y="108" width="136" height="198" rx="6" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/>
+  <rect x="358" y="108" width="136" height="40" rx="6" fill="#0284C7"/>
+  <rect x="358" y="136" width="136" height="12" fill="#0284C7"/>
+  <rect x="368" y="115" width="26" height="26" rx="4" fill="rgba(255,255,255,0.2)"/>
+  <text x="381" y="132" text-anchor="middle" fill="#fff" font-size="11" font-weight="800">Az</text>
+  <text x="443" y="127" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Azure ADLS</text>
+  <text x="443" y="141" text-anchor="middle" fill="#BAE6FD" font-size="9">Gen2  ·  Object Store</text>
+  <!-- Body -->
+  <text x="426" y="164" text-anchor="middle" fill="#0369A1" font-size="9" font-weight="600">landing/stripe/{entity}/</text>
+  <text x="426" y="179" text-anchor="middle" fill="#0284C7" font-size="9">landing/fx/rates/</text>
+  <text x="426" y="194" text-anchor="middle" fill="#0284C7" font-size="9">archive/</text>
+  <text x="426" y="211" text-anchor="middle" fill="#0284C7" font-size="9.5" font-weight="600">External Stage</text>
+  <rect x="370" y="222" width="48" height="16" rx="8" fill="#BAE6FD"/>
+  <text x="394" y="233" text-anchor="middle" fill="#0369A1" font-size="8.5" font-weight="600">dev  LRS</text>
+  <rect x="424" y="222" width="60" height="16" rx="8" fill="#BAE6FD"/>
+  <text x="454" y="233" text-anchor="middle" fill="#0369A1" font-size="8.5" font-weight="600">prod  GRS</text>
+  <rect x="370" y="244" width="112" height="16" rx="8" fill="#BAE6FD"/>
+  <text x="426" y="255" text-anchor="middle" fill="#0369A1" font-size="8.5" font-weight="600">COPY INTO → Snowflake</text>
 
-  <!-- Arrow + label -->
-  <line x1="178" y1="243" x2="290" y2="243" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ah-blue)"/>
-  <text x="234" y="237" text-anchor="middle" fill="#2563EB" font-size="9" font-weight="600">Parquet · Snappy</text>
-  <text x="234" y="256" text-anchor="middle" fill="#94A3B8" font-size="8.5">partitioned by entity</text>
+  <!-- Arrow 3 -->
+  <line x1="494" y1="197" x2="520" y2="197" stroke="#CBD5E1" stroke-width="1.5"/>
+  <polygon points="520,193 528,197 520,201" fill="#CBD5E1"/>
+  <text x="507" y="190" text-anchor="middle" fill="#94A3B8" font-size="8.5" font-weight="600">COPY</text>
 
-  <!-- Output detail pills -->
-  <rect x="310" y="214" width="100" height="16" rx="8" fill="#DBEAFE"/>
-  <text x="360" y="225" text-anchor="middle" fill="#1E40AF" font-size="9" font-weight="600">Parquet + Snappy</text>
-  <rect x="416" y="214" width="100" height="16" rx="8" fill="#DBEAFE"/>
-  <text x="466" y="225" text-anchor="middle" fill="#1E40AF" font-size="9" font-weight="600">date partitioned</text>
-  <rect x="310" y="236" width="120" height="16" rx="8" fill="#EFF6FF"/>
-  <text x="370" y="247" text-anchor="middle" fill="#1D4ED8" font-size="9" font-weight="600">incremental watermark</text>
-  <rect x="436" y="236" width="104" height="16" rx="8" fill="#EFF6FF"/>
-  <text x="488" y="247" text-anchor="middle" fill="#1D4ED8" font-size="9" font-weight="600">9 parallel ingesters</text>
+  <!-- ── 4. SNOWFLAKE MEDALLION (x=528, w=418, y=84, h=226) ── -->
+  <rect x="528" y="84" width="418" height="226" rx="6" fill="#F0FDFF" stroke="#29B5E8" stroke-width="2"/>
+  <rect x="528" y="84" width="418" height="36" rx="6" fill="#0369A1"/>
+  <rect x="528" y="108" width="418" height="12" fill="#0369A1"/>
+  <text x="552" y="102" fill="#fff" font-size="13">❄</text>
+  <text x="568" y="102" fill="#fff" font-size="12" font-weight="700">Snowflake</text>
+  <text x="670" y="102" fill="#BAE6FD" font-size="10.5">Medallion Architecture  ·  dbt 1.7  ·  Incremental MERGE</text>
+  <text x="898" y="102" fill="#7DD3FC" font-size="9.5">Multi-role RBAC  ·  2 warehouses</text>
 
-  <!-- ════════════════════════════════════════════ -->
-  <!--  LANE 3 — STORAGE                           -->
-  <!-- ════════════════════════════════════════════ -->
-  <rect x="16" y="304" width="1168" height="98" rx="10" fill="#E0F2FE" stroke="#7DD3FC" stroke-width="1.2"/>
-  <rect x="16" y="298" width="84" height="18" rx="9" fill="#0284C7"/>
-  <text x="58" y="310" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">03 · STORAGE</text>
+  <!-- RAW sub-box (x=540, w=84, y=120, h=182) -->
+  <rect x="540" y="120" width="84" height="182" rx="5" fill="#fff" stroke="#CBD5E1" stroke-width="1.2"/>
+  <rect x="540" y="120" width="84" height="26" rx="5" fill="#334155"/>
+  <rect x="540" y="134" width="84" height="12" fill="#334155"/>
+  <text x="582" y="137" text-anchor="middle" fill="#E2E8F0" font-size="10.5" font-weight="800">RAW</text>
+  <text x="582" y="161" text-anchor="middle" fill="#475569" font-size="8.5" font-weight="600">VARIANT column</text>
+  <text x="582" y="175" text-anchor="middle" fill="#64748B" font-size="8.5">Full JSON</text>
+  <text x="582" y="188" text-anchor="middle" fill="#64748B" font-size="8.5">preserved</text>
+  <text x="582" y="201" text-anchor="middle" fill="#64748B" font-size="8.5">COPY INTO</text>
+  <text x="582" y="214" text-anchor="middle" fill="#64748B" font-size="8.5">Append-only</text>
+  <text x="582" y="229" text-anchor="middle" fill="#94A3B8" font-size="8">Schema-resilient</text>
+  <text x="582" y="242" text-anchor="middle" fill="#94A3B8" font-size="8">Source of truth</text>
+  <text x="582" y="295" text-anchor="middle" fill="#94A3B8" font-size="7.5" font-style="italic">RAW schema</text>
 
-  <!-- Arrow ingest→storage -->
-  <line x1="104" y1="292" x2="104" y2="302" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ah-blue)"/>
+  <!-- Arrow RAW→BRZ -->
+  <line x1="624" y1="211" x2="638" y2="211" stroke="#D97706" stroke-width="1.5"/>
+  <polygon points="638,207 646,211 638,215" fill="#D97706"/>
 
-  <!-- ADLS card -->
-  <rect x="30" y="316" width="148" height="74" rx="8" fill="#fff" stroke="#0078D4" stroke-width="1.5"/>
-  <rect x="30" y="316" width="148" height="24" rx="8" fill="#0078D4"/>
-  <rect x="30" y="328" width="148" height="12" fill="#0078D4"/>
-  <text x="104" y="332" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Azure ADLS Gen2</text>
-  <text x="104" y="352" text-anchor="middle" fill="#64748B" font-size="9.5">Parquet + Snappy</text>
-  <text x="104" y="366" text-anchor="middle" fill="#64748B" font-size="9.5">External Stage → Snowflake</text>
-  <text x="104" y="380" text-anchor="middle" fill="#64748B" font-size="9.5">3 environments</text>
+  <!-- BRONZE sub-box (x=646, w=100, y=120, h=182) -->
+  <rect x="646" y="120" width="100" height="182" rx="5" fill="#fff" stroke="#D97706" stroke-width="1.5"/>
+  <rect x="646" y="120" width="100" height="26" rx="5" fill="#92400E"/>
+  <rect x="646" y="134" width="100" height="12" fill="#92400E"/>
+  <text x="696" y="137" text-anchor="middle" fill="#FEF3C7" font-size="10.5" font-weight="800">BRONZE</text>
+  <rect x="658" y="148" width="76" height="16" rx="8" fill="#FDE68A"/>
+  <text x="696" y="159" text-anchor="middle" fill="#78350F" font-size="9" font-weight="700">8 models</text>
+  <text x="696" y="176" text-anchor="middle" fill="#92400E" font-size="8.5">Typed · Flattened</text>
+  <text x="696" y="189" text-anchor="middle" fill="#92400E" font-size="8.5">Validated views</text>
+  <text x="696" y="206" text-anchor="middle" fill="#B45309" font-size="8">brz_charges</text>
+  <text x="696" y="218" text-anchor="middle" fill="#B45309" font-size="8">brz_refunds</text>
+  <text x="696" y="230" text-anchor="middle" fill="#B45309" font-size="8">brz_disputes</text>
+  <text x="696" y="242" text-anchor="middle" fill="#B45309" font-size="8">brz_payouts</text>
+  <text x="696" y="254" text-anchor="middle" fill="#B45309" font-size="8">brz_customers</text>
+  <text x="696" y="266" text-anchor="middle" fill="#B45309" font-size="8">brz_invoices</text>
+  <text x="696" y="278" text-anchor="middle" fill="#B45309" font-size="8">brz_balance_txns</text>
+  <text x="696" y="290" text-anchor="middle" fill="#B45309" font-size="8">brz_fx_rates</text>
+  <text x="696" y="295" text-anchor="middle" fill="#94A3B8" font-size="7.5" font-style="italic">BRONZE schema</text>
 
-  <!-- Arrow + label -->
-  <line x1="178" y1="353" x2="290" y2="353" stroke="#0284C7" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
-  <text x="234" y="347" text-anchor="middle" fill="#0284C7" font-size="9" font-weight="600">COPY INTO</text>
-  <text x="234" y="366" text-anchor="middle" fill="#94A3B8" font-size="8.5">external stage</text>
+  <!-- Arrow BRZ→SLV -->
+  <line x1="746" y1="211" x2="760" y2="211" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="760,207 768,211 760,215" fill="#475569"/>
 
-  <!-- Folder pills -->
-  <rect x="310" y="323" width="130" height="16" rx="8" fill="#E0F2FE"/>
-  <text x="375" y="334" text-anchor="middle" fill="#0369A1" font-size="9" font-weight="600">landing/stripe/{entity}/</text>
-  <rect x="446" y="323" width="104" height="16" rx="8" fill="#E0F2FE"/>
-  <text x="498" y="334" text-anchor="middle" fill="#0369A1" font-size="9" font-weight="600">landing/fx/rates/</text>
-  <rect x="556" y="323" width="60" height="16" rx="8" fill="#E0F2FE"/>
-  <text x="586" y="334" text-anchor="middle" fill="#0369A1" font-size="9" font-weight="600">archive/</text>
-  <!-- Env pills -->
-  <rect x="310" y="346" width="68" height="16" rx="8" fill="#F0FDFA"/>
-  <text x="344" y="357" text-anchor="middle" fill="#0F766E" font-size="9" font-weight="600">dev · LRS</text>
-  <rect x="384" y="346" width="72" height="16" rx="8" fill="#EFF6FF"/>
-  <text x="420" y="357" text-anchor="middle" fill="#1D4ED8" font-size="9" font-weight="600">test · LRS</text>
-  <rect x="462" y="346" width="76" height="16" rx="8" fill="#FEF2F2"/>
-  <text x="500" y="357" text-anchor="middle" fill="#B91C1C" font-size="9" font-weight="600">prod · GRS</text>
+  <!-- SILVER sub-box (x=768, w=100, y=120, h=182) -->
+  <rect x="768" y="120" width="100" height="182" rx="5" fill="#fff" stroke="#64748B" stroke-width="1.5"/>
+  <rect x="768" y="120" width="100" height="26" rx="5" fill="#334155"/>
+  <rect x="768" y="134" width="100" height="12" fill="#334155"/>
+  <text x="818" y="137" text-anchor="middle" fill="#E2E8F0" font-size="10.5" font-weight="800">SILVER</text>
+  <rect x="780" y="148" width="76" height="16" rx="8" fill="#E2E8F0"/>
+  <text x="818" y="159" text-anchor="middle" fill="#334155" font-size="9" font-weight="700">7 models</text>
+  <text x="818" y="176" text-anchor="middle" fill="#475569" font-size="8.5">Deduped · FX → USD</text>
+  <text x="818" y="189" text-anchor="middle" fill="#475569" font-size="8.5">QUALIFY dedup guard</text>
+  <text x="818" y="206" text-anchor="middle" fill="#64748B" font-size="8">stg_charges</text>
+  <text x="818" y="218" text-anchor="middle" fill="#64748B" font-size="8">stg_refunds</text>
+  <text x="818" y="230" text-anchor="middle" fill="#64748B" font-size="8">stg_disputes</text>
+  <text x="818" y="242" text-anchor="middle" fill="#64748B" font-size="8">stg_payouts</text>
+  <text x="818" y="254" text-anchor="middle" fill="#64748B" font-size="8">stg_invoice_line_items</text>
+  <text x="818" y="266" text-anchor="middle" fill="#64748B" font-size="8">stg_ledger_events</text>
+  <text x="818" y="278" text-anchor="middle" fill="#64748B" font-size="8">stg_customers_history</text>
+  <text x="818" y="295" text-anchor="middle" fill="#94A3B8" font-size="7.5" font-style="italic">SILVER schema</text>
 
-  <!-- ════════════════════════════════════════════ -->
-  <!--  LANE 4 — SNOWFLAKE MEDALLION               -->
-  <!-- ════════════════════════════════════════════ -->
-  <rect x="16" y="414" width="1168" height="208" rx="10" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.2"/>
-  <rect x="16" y="408" width="148" height="18" rx="9" fill="#059669"/>
-  <text x="90" y="420" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">04 · SNOWFLAKE — MEDALLION</text>
+  <!-- Arrow SLV→GLD -->
+  <line x1="868" y1="211" x2="882" y2="211" stroke="#CA8A04" stroke-width="1.5"/>
+  <polygon points="882,207 890,211 882,215" fill="#CA8A04"/>
 
-  <!-- Arrow storage→warehouse -->
-  <line x1="104" y1="402" x2="104" y2="412" stroke="#0284C7" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+  <!-- GOLD sub-box (x=890, w=48, y=120, h=182) — single clean rect -->
+  <rect x="890" y="120" width="48" height="182" rx="5" fill="#fff" stroke="#CA8A04" stroke-width="2"/>
+  <rect x="890" y="120" width="48" height="26" rx="5" fill="#854D0E"/>
+  <rect x="890" y="134" width="48" height="12" fill="#854D0E"/>
+  <text x="914" y="137" text-anchor="middle" fill="#FEF08A" font-size="10.5" font-weight="800">GOLD</text>
+  <rect x="898" y="148" width="32" height="16" rx="8" fill="#FEF08A"/>
+  <text x="914" y="159" text-anchor="middle" fill="#78350F" font-size="9" font-weight="700">×12</text>
+  <text x="914" y="175" text-anchor="middle" fill="#92400E" font-size="8" font-weight="700">6 Facts</text>
+  <text x="914" y="188" text-anchor="middle" fill="#B45309" font-size="7.5">fct_txns</text>
+  <text x="914" y="199" text-anchor="middle" fill="#B45309" font-size="7.5">fct_charges</text>
+  <text x="914" y="210" text-anchor="middle" fill="#B45309" font-size="7.5">fct_refunds</text>
+  <text x="914" y="221" text-anchor="middle" fill="#B45309" font-size="7.5">fct_disputes</text>
+  <text x="914" y="232" text-anchor="middle" fill="#B45309" font-size="7.5">fct_payouts</text>
+  <text x="914" y="243" text-anchor="middle" fill="#B45309" font-size="7.5">fct_mrr</text>
+  <text x="914" y="258" text-anchor="middle" fill="#D97706" font-size="8" font-weight="700">6 Dims</text>
+  <text x="914" y="270" text-anchor="middle" fill="#B45309" font-size="7.5">customers</text>
+  <text x="914" y="281" text-anchor="middle" fill="#B45309" font-size="7.5">dates · fx</text>
+  <text x="914" y="292" text-anchor="middle" fill="#B45309" font-size="7.5">plans · geo</text>
+  <text x="914" y="295" text-anchor="middle" fill="#94A3B8" font-size="7" font-style="italic"> </text>
 
-  <!-- Snowflake card -->
-  <rect x="30" y="426" width="148" height="80" rx="8" fill="#fff" stroke="#29B5E8" stroke-width="1.5"/>
-  <rect x="30" y="426" width="148" height="24" rx="8" fill="#29B5E8"/>
-  <rect x="30" y="438" width="148" height="12" fill="#29B5E8"/>
-  <text x="104" y="442" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">❄ Snowflake</text>
-  <text x="104" y="462" text-anchor="middle" fill="#64748B" font-size="9.5">Multi-role RBAC</text>
-  <text x="104" y="476" text-anchor="middle" fill="#64748B" font-size="9.5">2 warehouses</text>
-  <text x="104" y="490" text-anchor="middle" fill="#64748B" font-size="9.5">5 schemas / env</text>
-  <rect x="54" y="500" width="46" height="12" rx="6" fill="#E0F2FE"/>
-  <text x="77" y="509" text-anchor="middle" fill="#0369A1" font-size="8" font-weight="700">INGEST WH</text>
-  <rect x="106" y="500" width="56" height="12" rx="6" fill="#E0F2FE"/>
-  <text x="134" y="509" text-anchor="middle" fill="#0369A1" font-size="8" font-weight="700">TRANSFORM WH</text>
+  <!-- Arrow 4: Snowflake → Consumers -->
+  <line x1="946" y1="197" x2="972" y2="197" stroke="#CBD5E1" stroke-width="1.5"/>
+  <polygon points="972,193 980,197 972,201" fill="#CBD5E1"/>
+  <text x="959" y="190" text-anchor="middle" fill="#94A3B8" font-size="8.5" font-weight="600">SQL</text>
 
-  <!-- Arrow Snowflake → RAW -->
-  <line x1="178" y1="466" x2="210" y2="466" stroke="#059669" stroke-width="1.5" marker-end="url(#ah-green)"/>
+  <!-- ── 5. CONSUMERS (x=980, w=188, y=108, h=198) ── -->
+  <rect x="980" y="108" width="188" height="198" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5"/>
+  <rect x="980" y="108" width="188" height="40" rx="6" fill="#15803D"/>
+  <rect x="980" y="136" width="188" height="12" fill="#15803D"/>
+  <text x="994" y="126" fill="#fff" font-size="17">📊</text>
+  <text x="1074" y="126" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">BI Consumers</text>
+  <text x="1074" y="141" text-anchor="middle" fill="#BBF7D0" font-size="9">Analytics &amp; Reporting</text>
 
-  <!-- RAW layer -->
-  <rect x="210" y="426" width="156" height="180" rx="8" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
-  <rect x="210" y="426" width="156" height="24" rx="8" fill="#334155"/>
-  <rect x="210" y="438" width="156" height="12" fill="#334155"/>
-  <text x="288" y="442" text-anchor="middle" fill="#E2E8F0" font-size="11" font-weight="700">RAW</text>
-  <rect x="222" y="452" width="76" height="14" rx="7" fill="#E2E8F0"/>
-  <text x="260" y="462" text-anchor="middle" fill="#475569" font-size="9" font-weight="700">APPEND-ONLY</text>
-  <text x="288" y="480" text-anchor="middle" fill="#475569" font-size="9.5" font-weight="600">raw_payload VARIANT</text>
-  <text x="288" y="495" text-anchor="middle" fill="#64748B" font-size="9">Full Stripe JSON preserved</text>
-  <text x="288" y="510" text-anchor="middle" fill="#64748B" font-size="9">COPY INTO from stage</text>
-  <text x="288" y="525" text-anchor="middle" fill="#64748B" font-size="9">Schema-resilient design</text>
+  <!-- Power BI sub-box (y=152, h=42) -->
+  <rect x="992" y="152" width="164" height="42" rx="5" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="1074" y="168" text-anchor="middle" fill="#15803D" font-size="10.5" font-weight="700">Power BI</text>
+  <text x="1074" y="183" text-anchor="middle" fill="#166534" font-size="8.5">Revenue dashboards · MRR</text>
 
-  <!-- Arrow RAW → BRONZE -->
-  <line x1="366" y1="466" x2="392" y2="466" stroke="#D97706" stroke-width="1.5" marker-end="url(#ah-orange)"/>
-  <text x="379" y="460" text-anchor="middle" fill="#D97706" font-size="8" font-weight="600">dbt</text>
+  <!-- Metabase sub-box (y=200, h=42) -->
+  <rect x="992" y="200" width="164" height="42" rx="5" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="1074" y="216" text-anchor="middle" fill="#15803D" font-size="10.5" font-weight="700">Metabase</text>
+  <text x="1074" y="231" text-anchor="middle" fill="#166534" font-size="8.5">Self-serve analytics</text>
 
-  <!-- BRONZE layer -->
-  <rect x="392" y="426" width="164" height="180" rx="8" fill="#FFF7ED" stroke="#FED7AA" stroke-width="1.5"/>
-  <rect x="392" y="426" width="164" height="24" rx="8" fill="#78350F"/>
-  <rect x="392" y="438" width="164" height="12" fill="#78350F"/>
-  <text x="474" y="442" text-anchor="middle" fill="#FEF3C7" font-size="11" font-weight="700">BRONZE · 8 models</text>
-  <rect x="404" y="452" width="60" height="14" rx="7" fill="#FDE68A"/>
-  <text x="434" y="462" text-anchor="middle" fill="#78350F" font-size="9" font-weight="700">INCREMENTAL</text>
-  <text x="474" y="480" text-anchor="middle" fill="#92400E" font-size="9.5" font-weight="600">Typed · Flattened · Validated</text>
-  <text x="474" y="497" text-anchor="middle" fill="#B45309" font-size="8.5">brz_charges · brz_refunds</text>
-  <text x="474" y="511" text-anchor="middle" fill="#B45309" font-size="8.5">brz_disputes · brz_payouts</text>
-  <text x="474" y="525" text-anchor="middle" fill="#B45309" font-size="8.5">brz_customers · brz_invoices</text>
-  <text x="474" y="539" text-anchor="middle" fill="#B45309" font-size="8.5">brz_balance_txns · brz_fx_rates</text>
-  <text x="474" y="556" text-anchor="middle" fill="#D97706" font-size="8">raw_payload:field::TYPE extraction</text>
-  <text x="474" y="570" text-anchor="middle" fill="#D97706" font-size="8">Source-of-truth VARIANT columns</text>
-  <text x="474" y="584" text-anchor="middle" fill="#D97706" font-size="8">dbt tests: not_null · unique</text>
-  <text x="474" y="598" text-anchor="middle" fill="#D97706" font-size="8">accepted_values · freshness</text>
+  <!-- SQL Analysts sub-box (y=248, h=42) -->
+  <rect x="992" y="248" width="164" height="42" rx="5" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="1074" y="264" text-anchor="middle" fill="#15803D" font-size="10.5" font-weight="700">SQL Analysts</text>
+  <text x="1074" y="279" text-anchor="middle" fill="#166534" font-size="8.5">Financial reconciliation</text>
 
-  <!-- Arrow BRONZE → SILVER -->
-  <line x1="556" y1="466" x2="580" y2="466" stroke="#475569" stroke-width="1.5" marker-end="url(#ah-gray)"/>
-  <text x="568" y="460" text-anchor="middle" fill="#475569" font-size="8" font-weight="600">MERGE</text>
+  <!-- ═══════════════════════════════════════════ -->
+  <!--   SUPPORT ROW (y 334–448)                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <line x1="32" y1="316" x2="1168" y2="316" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="32" y="332" fill="#94A3B8" font-size="9" font-weight="700" letter-spacing="1.5">ORCHESTRATION &amp; INFRASTRUCTURE</text>
 
-  <!-- SILVER layer -->
-  <rect x="580" y="426" width="164" height="180" rx="8" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>
-  <rect x="580" y="426" width="164" height="24" rx="8" fill="#334155"/>
-  <rect x="580" y="438" width="164" height="12" fill="#334155"/>
-  <text x="662" y="442" text-anchor="middle" fill="#E2E8F0" font-size="11" font-weight="700">SILVER · 7 models</text>
-  <rect x="592" y="452" width="60" height="14" rx="7" fill="#E2E8F0"/>
-  <text x="622" y="462" text-anchor="middle" fill="#334155" font-size="9" font-weight="700">MERGE · DEDUP</text>
-  <text x="662" y="480" text-anchor="middle" fill="#334155" font-size="9.5" font-weight="600">Deduped · FX-normalised · USD</text>
-  <text x="662" y="497" text-anchor="middle" fill="#475569" font-size="8.5">stg_charges · stg_refunds</text>
-  <text x="662" y="511" text-anchor="middle" fill="#475569" font-size="8.5">stg_disputes · stg_payouts</text>
-  <text x="662" y="525" text-anchor="middle" fill="#475569" font-size="8.5">stg_invoice_line_items</text>
-  <text x="662" y="539" text-anchor="middle" fill="#475569" font-size="8.5">stg_finance_ledger_events</text>
-  <text x="662" y="553" text-anchor="middle" fill="#475569" font-size="8.5">stg_customers_history</text>
-  <text x="662" y="572" text-anchor="middle" fill="#64748B" font-size="8">QUALIFY dedup guard</text>
-  <text x="662" y="585" text-anchor="middle" fill="#64748B" font-size="8">Cents → USD conversion</text>
-  <text x="662" y="598" text-anchor="middle" fill="#64748B" font-size="8">Signed amounts convention</text>
+  <!-- Airflow (x=32, w=362, y=338, h=112) -->
+  <rect x="32" y="338" width="362" height="112" rx="6" fill="#F0F9FF" stroke="#0284C7" stroke-width="1.2"/>
+  <rect x="32" y="338" width="362" height="32" rx="6" fill="#0369A1"/>
+  <rect x="32" y="358" width="362" height="12" fill="#0369A1"/>
+  <rect x="44" y="345" width="22" height="22" rx="4" fill="rgba(255,255,255,0.2)"/>
+  <text x="55" y="360" text-anchor="middle" fill="#fff" font-size="11" font-weight="800">AF</text>
+  <text x="155" y="359" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">Apache Airflow 2.x</text>
+  <text x="330" y="359" text-anchor="middle" fill="#BAE6FD" font-size="9.5">Docker · LocalExecutor</text>
+  <text x="213" y="384" text-anchor="middle" fill="#0369A1" font-size="10">26-task DAG · Daily at <tspan font-weight="700">1:30 AM AEST</tspan> (15:30 UTC)</text>
+  <text x="60" y="400" fill="#475569" font-size="8.5">Ingest ×9</text>
+  <text x="113" y="400" fill="#475569" font-size="8.5">COPY INTO ×8</text>
+  <text x="198" y="400" fill="#475569" font-size="8.5">dbt Run/Test ×6</text>
+  <text x="286" y="400" fill="#475569" font-size="8.5">Reconcile · Watermarks</text>
+  <text x="213" y="418" text-anchor="middle" fill="#64748B" font-size="8.5">finance_data_platform_daily  ·  snowflake_finance connection</text>
+  <text x="213" y="434" text-anchor="middle" fill="#94A3B8" font-size="8">Ingest → COPY INTO → Bronze → Silver → Gold → Reconcile → Notify</text>
 
-  <!-- Arrow SILVER → GOLD -->
-  <line x1="744" y1="466" x2="768" y2="466" stroke="#CA8A04" stroke-width="1.5" marker-end="url(#ah-amber)"/>
-  <text x="756" y="460" text-anchor="middle" fill="#CA8A04" font-size="8" font-weight="600">MERGE</text>
+  <!-- Terraform (x=406, w=362, y=338, h=112) -->
+  <rect x="406" y="338" width="362" height="112" rx="6" fill="#FAF5FF" stroke="#9333EA" stroke-width="1.2"/>
+  <rect x="406" y="338" width="362" height="32" rx="6" fill="#7C3AED"/>
+  <rect x="406" y="358" width="362" height="12" fill="#7C3AED"/>
+  <rect x="418" y="345" width="22" height="22" rx="4" fill="rgba(255,255,255,0.2)"/>
+  <text x="429" y="360" text-anchor="middle" fill="#fff" font-size="11" font-weight="800">TF</text>
+  <text x="525" y="359" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">Terraform IaC</text>
+  <text x="690" y="359" text-anchor="middle" fill="#DDD6FE" font-size="9.5">Azure Remote State</text>
+  <text x="587" y="384" text-anchor="middle" fill="#6D28D9" font-size="9.5">3 environments  ·  Snowflake + Azure modules</text>
+  <text x="587" y="400" text-anchor="middle" fill="#64748B" font-size="8.5">Snowflake: DB · 5 Schemas · 3 Roles · 2 Warehouses · 2 Users</text>
+  <text x="587" y="416" text-anchor="middle" fill="#64748B" font-size="8.5">Azure: Resource Group · ADLS Gen2 · Storage Account · Blob</text>
+  <rect x="420" y="426" width="84" height="16" rx="8" fill="#EDE9FE"/>
+  <text x="462" y="437" text-anchor="middle" fill="#6D28D9" font-size="8.5" font-weight="600">dev: X-Small</text>
+  <rect x="510" y="426" width="78" height="16" rx="8" fill="#EDE9FE"/>
+  <text x="549" y="437" text-anchor="middle" fill="#6D28D9" font-size="8.5" font-weight="600">test: Small</text>
+  <rect x="594" y="426" width="84" height="16" rx="8" fill="#EDE9FE"/>
+  <text x="636" y="437" text-anchor="middle" fill="#6D28D9" font-size="8.5" font-weight="600">prod: Medium</text>
+  <rect x="684" y="426" width="74" height="16" rx="8" fill="#EDE9FE"/>
+  <text x="721" y="437" text-anchor="middle" fill="#6D28D9" font-size="8.5" font-weight="600">prod: GRS</text>
 
-  <!-- GOLD layer -->
-  <rect x="768" y="426" width="200" height="180" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
-  <rect x="768" y="426" width="200" height="24" rx="8" fill="#854D0E"/>
-  <rect x="768" y="438" width="200" height="12" fill="#854D0E"/>
-  <text x="868" y="442" text-anchor="middle" fill="#FEF08A" font-size="11" font-weight="700">GOLD · 12 models</text>
-  <rect x="780" y="452" width="78" height="14" rx="7" fill="#FEF08A"/>
-  <text x="819" y="462" text-anchor="middle" fill="#78350F" font-size="9" font-weight="700">6 FACTS · 6 DIMS</text>
-  <text x="868" y="480" text-anchor="middle" fill="#92400E" font-size="9" font-weight="700">Facts</text>
-  <text x="868" y="495" text-anchor="middle" fill="#B45309" font-size="8.5">fct_transactions · fct_charges</text>
-  <text x="868" y="508" text-anchor="middle" fill="#B45309" font-size="8.5">fct_refunds · fct_disputes</text>
-  <text x="868" y="521" text-anchor="middle" fill="#B45309" font-size="8.5">fct_payouts · fct_mrr_movements</text>
-  <text x="868" y="540" text-anchor="middle" fill="#92400E" font-size="9" font-weight="700">Dimensions</text>
-  <text x="868" y="555" text-anchor="middle" fill="#B45309" font-size="8.5">dim_customers · dim_dates</text>
-  <text x="868" y="568" text-anchor="middle" fill="#B45309" font-size="8.5">dim_currencies · dim_plans</text>
-  <text x="868" y="581" text-anchor="middle" fill="#B45309" font-size="8.5">dim_payment_category</text>
-  <text x="868" y="594" text-anchor="middle" fill="#B45309" font-size="8.5">dim_geography</text>
+  <!-- GitHub Actions (x=780, w=388, y=338, h=112) -->
+  <rect x="780" y="338" width="388" height="112" rx="6" fill="#F9FAFB" stroke="#374151" stroke-width="1.2"/>
+  <rect x="780" y="338" width="388" height="32" rx="6" fill="#111827"/>
+  <rect x="780" y="358" width="388" height="12" fill="#111827"/>
+  <rect x="792" y="345" width="22" height="22" rx="4" fill="rgba(255,255,255,0.15)"/>
+  <text x="803" y="360" text-anchor="middle" fill="#fff" font-size="11" font-weight="800">GH</text>
+  <text x="893" y="359" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">GitHub Actions CI/CD</text>
+  <text x="1080" y="359" text-anchor="middle" fill="#9CA3AF" font-size="9.5">4 workflows · PR + push to main</text>
+  <text x="974" y="384" text-anchor="middle" fill="#374151" font-size="9.5">Automated on every PR and push · dbt docs → GitHub Pages</text>
+  <rect x="792" y="396" width="84" height="18" rx="4" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="834" y="408" text-anchor="middle" fill="#15803D" font-size="8.5" font-weight="700">✓ dbt-ci.yml</text>
+  <rect x="882" y="396" width="104" height="18" rx="4" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="934" y="408" text-anchor="middle" fill="#15803D" font-size="8.5" font-weight="700">✓ terraform-ci.yml</text>
+  <rect x="992" y="396" width="104" height="18" rx="4" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="1044" y="408" text-anchor="middle" fill="#15803D" font-size="8.5" font-weight="700">✓ python-lint.yml</text>
+  <rect x="1102" y="396" width="54" height="18" rx="4" fill="#DCFCE7" stroke="#16A34A" stroke-width="1"/>
+  <text x="1129" y="408" text-anchor="middle" fill="#15803D" font-size="8.5" font-weight="700">✓ docs</text>
+  <text x="974" y="430" text-anchor="middle" fill="#9CA3AF" font-size="8.5">Secrets: SNOWFLAKE_ACCOUNT · SNOWFLAKE_USER · SNOWFLAKE_PASSWORD · AZURE_*</text>
 
-  <!-- Arrow GOLD → CONSUMERS -->
-  <line x1="968" y1="466" x2="994" y2="466" stroke="#CA8A04" stroke-width="2" marker-end="url(#ah-amber)"/>
+  <!-- ═══════════════════════════════════════════ -->
+  <!--   FOOTER (y 458–623)                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <line x1="0" y1="458" x2="1200" y2="458" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- CONSUMERS card -->
-  <rect x="994" y="426" width="172" height="180" rx="8" fill="#fff" stroke="#F59E0B" stroke-width="1.5"/>
-  <rect x="994" y="426" width="172" height="24" rx="8" fill="#D97706"/>
-  <rect x="994" y="438" width="172" height="12" fill="#D97706"/>
-  <text x="1080" y="442" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">📊 Consumers</text>
-  <rect x="1006" y="452" width="56" height="14" rx="7" fill="#FEF3C7"/>
-  <text x="1034" y="462" text-anchor="middle" fill="#92400E" font-size="9" font-weight="700">ANALYTICS</text>
-  <text x="1080" y="488" text-anchor="middle" fill="#374151" font-size="10" font-weight="600">Power BI</text>
-  <text x="1080" y="506" text-anchor="middle" fill="#64748B" font-size="9">Revenue dashboards</text>
-  <text x="1080" y="522" text-anchor="middle" fill="#64748B" font-size="9">MRR tracking</text>
-  <text x="1080" y="543" text-anchor="middle" fill="#374151" font-size="10" font-weight="600">Metabase</text>
-  <text x="1080" y="560" text-anchor="middle" fill="#64748B" font-size="9">Self-serve analytics</text>
-  <text x="1080" y="579" text-anchor="middle" fill="#374151" font-size="10" font-weight="600">SQL Analysts</text>
-  <text x="1080" y="596" text-anchor="middle" fill="#64748B" font-size="9">Financial reconciliation</text>
+  <!-- Stats (y 458–530) -->
+  <text x="40" y="490" fill="#0F172A" font-size="34" font-weight="800">9</text>
+  <text x="38" y="510" fill="#64748B" font-size="10">Stripe entities</text>
+  <line x1="96" y1="466" x2="96" y2="518" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- ════════════════════════════════════════════ -->
-  <!--  ORCHESTRATION BAR                          -->
-  <!-- ════════════════════════════════════════════ -->
-  <rect x="16" y="634" width="1168" height="120" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
-  <text x="32" y="653" fill="#374151" font-size="10" font-weight="700" letter-spacing="1">ORCHESTRATION &amp; INFRASTRUCTURE</text>
+  <text x="108" y="490" fill="#0F172A" font-size="34" font-weight="800">27</text>
+  <text x="108" y="510" fill="#64748B" font-size="10">dbt models</text>
+  <line x1="174" y1="466" x2="174" y2="518" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- Airflow card -->
-  <rect x="30" y="660" width="274" height="82" rx="8" fill="#fff" stroke="#BAE6FD" stroke-width="1.2"/>
-  <rect x="30" y="660" width="274" height="22" rx="8" fill="#0369A1"/>
-  <rect x="30" y="670" width="274" height="12" fill="#0369A1"/>
-  <text x="167" y="675" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">⚙ Apache Airflow 2.x</text>
-  <text x="167" y="695" text-anchor="middle" fill="#374151" font-size="9.5">26-task DAG · 1:30 AM AEST · Docker Compose</text>
-  <text x="50" y="711" fill="#017CEE" font-size="8.5" font-weight="600">Ingest ×9</text>
-  <text x="105" y="711" fill="#017CEE" font-size="8.5" font-weight="600">COPY INTO ×8</text>
-  <text x="178" y="711" fill="#017CEE" font-size="8.5" font-weight="600">dbt Run/Test ×6</text>
-  <text x="255" y="711" fill="#017CEE" font-size="8.5" font-weight="600">Reconcile</text>
-  <text x="167" y="728" text-anchor="middle" fill="#64748B" font-size="8.5">Watermarks · Success notification</text>
-  <text x="167" y="738" text-anchor="middle" fill="#64748B" font-size="8.5">finance_snowflake_conn · LocalExecutor</text>
+  <text x="186" y="490" fill="#0F172A" font-size="34" font-weight="800">26</text>
+  <text x="184" y="510" fill="#64748B" font-size="10">Airflow tasks</text>
+  <line x1="252" y1="466" x2="252" y2="518" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- Terraform card -->
-  <rect x="316" y="660" width="274" height="82" rx="8" fill="#fff" stroke="#DDD6FE" stroke-width="1.2"/>
-  <rect x="316" y="660" width="274" height="22" rx="8" fill="#4C1D95"/>
-  <rect x="316" y="670" width="274" height="12" fill="#4C1D95"/>
-  <text x="453" y="675" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">🏗 Terraform IaC</text>
-  <text x="453" y="695" text-anchor="middle" fill="#374151" font-size="9.5">3 environments · Azure Blob remote state</text>
-  <text x="336" y="711" fill="#7C3AED" font-size="8.5" font-weight="600">dev: X-Small · LRS</text>
-  <text x="436" y="711" fill="#7C3AED" font-size="8.5" font-weight="600">test: Small · LRS</text>
-  <text x="530" y="711" fill="#7C3AED" font-size="8.5" font-weight="600">prod: Medium · GRS</text>
-  <text x="453" y="728" text-anchor="middle" fill="#64748B" font-size="8.5">Snowflake module · Azure module</text>
-  <text x="453" y="738" text-anchor="middle" fill="#64748B" font-size="8.5">DB · Schemas · Roles · Warehouses · Storage</text>
+  <text x="264" y="490" fill="#0F172A" font-size="34" font-weight="800">3</text>
+  <text x="260" y="510" fill="#64748B" font-size="10">environments</text>
+  <line x1="320" y1="466" x2="320" y2="518" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- GitHub Actions card -->
-  <rect x="602" y="660" width="274" height="82" rx="8" fill="#fff" stroke="#D1D5DB" stroke-width="1.2"/>
-  <rect x="602" y="660" width="274" height="22" rx="8" fill="#24292F"/>
-  <rect x="602" y="670" width="274" height="12" fill="#24292F"/>
-  <text x="739" y="675" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">🔄 GitHub Actions CI/CD</text>
-  <text x="739" y="695" text-anchor="middle" fill="#374151" font-size="9.5">4 workflows · auto-triggered on PR &amp; push</text>
-  <text x="620" y="711" fill="#24292F" font-size="8.5" font-weight="600">dbt-ci</text>
-  <text x="656" y="711" fill="#24292F" font-size="8.5" font-weight="600">terraform-ci</text>
-  <text x="722" y="711" fill="#24292F" font-size="8.5" font-weight="600">python-lint</text>
-  <text x="793" y="711" fill="#24292F" font-size="8.5" font-weight="600">dbt-docs</text>
-  <text x="739" y="728" text-anchor="middle" fill="#64748B" font-size="8.5">Compile · Validate · flake8 · GitHub Pages</text>
-  <text x="739" y="738" text-anchor="middle" fill="#64748B" font-size="8.5">Required secrets: SNOWFLAKE_* · AZURE_*</text>
+  <text x="332" y="490" fill="#0F172A" font-size="34" font-weight="800">4</text>
+  <text x="328" y="510" fill="#64748B" font-size="10">CI workflows</text>
+  <line x1="400" y1="458" x2="400" y2="530" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- Snowflake RBAC card -->
-  <rect x="888" y="660" width="274" height="82" rx="8" fill="#fff" stroke="#BAE6FD" stroke-width="1.2"/>
-  <rect x="888" y="660" width="274" height="22" rx="8" fill="#0369A1"/>
-  <rect x="888" y="670" width="274" height="12" fill="#0369A1"/>
-  <text x="1025" y="675" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">❄ Snowflake RBAC</text>
-  <text x="1025" y="695" text-anchor="middle" fill="#374151" font-size="9.5">3 roles · 2 service accounts · 5 schemas</text>
-  <text x="900" y="711" fill="#0369A1" font-size="8.5" font-weight="600">TRANSFORMER</text>
-  <text x="975" y="711" fill="#0369A1" font-size="8.5" font-weight="600">LOADER</text>
-  <text x="1030" y="711" fill="#0369A1" font-size="8.5" font-weight="600">ANALYST</text>
-  <text x="1025" y="728" text-anchor="middle" fill="#64748B" font-size="8.5">RAW · BRONZE · SILVER · GOLD · AUDIT</text>
-  <text x="1025" y="738" text-anchor="middle" fill="#64748B" font-size="8.5">FINANCE_DBT_USER · FINANCE_AIRFLOW_USER</text>
+  <!-- Author -->
+  <text x="420" y="484" fill="#0F172A" font-size="14" font-weight="700">Reddy Motuku</text>
+  <text x="420" y="502" fill="#64748B" font-size="10.5">Data Engineer  ·  Azure · Snowflake · dbt · Airflow · Terraform</text>
+  <text x="420" y="518" fill="#2563EB" font-size="10">github.com/reddymotukugit/finance-data-platform</text>
+  <line x1="780" y1="458" x2="780" y2="530" stroke="#E2E8F0" stroke-width="1"/>
 
-  <!-- ════════════════════════════════════════════ -->
-  <!--  FOOTER / LEGEND                            -->
-  <!-- ════════════════════════════════════════════ -->
-  <rect x="16" y="764" width="1168" height="40" rx="8" fill="#F1F5F9"/>
-  <text x="32" y="781" fill="#374151" font-size="10" font-weight="700">LEGEND</text>
-  <line x1="88" y1="778" x2="116" y2="778" stroke="#475569" stroke-width="1.5" marker-end="url(#ah)"/>
-  <text x="122" y="782" fill="#64748B" font-size="9.5">Data flow</text>
-  <line x1="178" y1="778" x2="206" y2="778" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,3"/>
-  <text x="212" y="782" fill="#64748B" font-size="9.5">Orchestration</text>
-  <text x="310" y="782" fill="#64748B" font-size="9.5">|</text>
-  <rect x="320" y="771" width="58" height="14" rx="7" fill="#FDE68A"/>
-  <text x="349" y="781" text-anchor="middle" fill="#78350F" font-size="9" font-weight="700">8 Bronze</text>
-  <rect x="384" y="771" width="56" height="14" rx="7" fill="#E2E8F0"/>
-  <text x="412" y="781" text-anchor="middle" fill="#334155" font-size="9" font-weight="700">7 Silver</text>
-  <rect x="446" y="771" width="56" height="14" rx="7" fill="#FEF08A"/>
-  <text x="474" y="781" text-anchor="middle" fill="#713F12" font-size="9" font-weight="700">12 Gold</text>
-  <text x="508" y="781" fill="#64748B" font-size="9.5">= 27 dbt models total</text>
-  <text x="660" y="782" fill="#64748B" font-size="9.5">|</text>
-  <text x="672" y="782" fill="#64748B" font-size="9.5">Schedule: 1:30 AM AEST (15:30 UTC) daily</text>
-  <text x="900" y="782" fill="#64748B" font-size="9.5">|</text>
-  <text x="912" y="782" fill="#64748B" font-size="9.5">github.com/reddymotukugit/finance-data-platform</text>
+  <!-- Hashtags -->
+  <text x="800" y="480" fill="#94A3B8" font-size="10">#DataEngineering   #Snowflake   #dbt   #Azure</text>
+  <text x="800" y="498" fill="#94A3B8" font-size="10">#Airflow   #Terraform   #DataPipeline   #Python</text>
+  <text x="800" y="516" fill="#94A3B8" font-size="10">#DataPlatform   #SQL   #FinTech   #CI</text>
 
-  <!-- dbt watermark in warehouse lane -->
-  <rect x="1100" y="430" width="68" height="20" rx="6" fill="#FF694A22" stroke="#FF694A" stroke-width="1"/>
-  <text x="1134" y="444" text-anchor="middle" fill="#FF694A" font-size="9" font-weight="700">dbt 1.7</text>
+  <!-- ═══════ KEY DESIGN DECISIONS (y 534–623) ═══════ -->
+  <rect x="0" y="530" width="1200" height="93" fill="#F8FAFC"/>
+  <line x1="0" y1="530" x2="1200" y2="530" stroke="#E2E8F0" stroke-width="1"/>
+
+  <!-- Column 1 -->
+  <text x="32" y="551" fill="#0F172A" font-size="9.5" font-weight="700">KEY DESIGN DECISIONS</text>
+  <text x="32" y="567" fill="#64748B" font-size="8.5">raw_payload VARIANT — full Stripe JSON preserved, schema-resilient</text>
+  <text x="32" y="581" fill="#64748B" font-size="8.5">QUALIFY ROW_NUMBER() dedup guard in all Silver models</text>
+  <text x="32" y="595" fill="#64748B" font-size="8.5">FX normalisation in Silver — all amounts → USD before Gold</text>
+  <text x="32" y="609" fill="#64748B" font-size="8.5">Signed amount convention — refunds &amp; disputes as negatives</text>
+
+  <line x1="510" y1="536" x2="510" y2="620" stroke="#E2E8F0" stroke-width="1"/>
+
+  <!-- Column 2 -->
+  <text x="526" y="551" fill="#0F172A" font-size="9.5" font-weight="700">STACK VERSIONS</text>
+  <text x="526" y="567" fill="#64748B" font-size="8.5">Python 3.11  ·  dbt 1.7  ·  Apache Airflow 2.x</text>
+  <text x="526" y="581" fill="#64748B" font-size="8.5">Snowflake-Labs/snowflake ~0.87  ·  hashicorp/azurerm ~3.90</text>
+  <text x="526" y="595" fill="#64748B" font-size="8.5">Incremental MERGE strategy  ·  Azure Blob remote state</text>
+  <text x="526" y="609" fill="#64748B" font-size="8.5">Docker Compose · LocalExecutor · 26-task DAG</text>
+
+  <line x1="890" y1="536" x2="890" y2="620" stroke="#E2E8F0" stroke-width="1"/>
+
+  <!-- Column 3 -->
+  <text x="906" y="551" fill="#0F172A" font-size="9.5" font-weight="700">SCHEDULE &amp; SCALE</text>
+  <text x="906" y="567" fill="#64748B" font-size="8.5">Daily at 1:30 AM AEST  (15:30 UTC)</text>
+  <text x="906" y="581" fill="#64748B" font-size="8.5">Incremental watermark — only new records processed</text>
+  <text x="906" y="595" fill="#64748B" font-size="8.5">~5–10 min end-to-end run time</text>
+  <text x="906" y="609" fill="#64748B" font-size="8.5">dev · test · prod — 3 isolated Terraform environments</text>
+
+  <!-- Bottom stripe -->
+  <rect x="0" y="623" width="1200" height="5" fill="#2563EB"/>
+
 </svg>
