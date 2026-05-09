@@ -3,15 +3,15 @@ output "database_name" {
 }
 
 output "transformer_role_name" {
-  value = snowflake_role.transformer.name
+  value = snowflake_account_role.transformer.name
 }
 
 output "loader_role_name" {
-  value = snowflake_role.loader.name
+  value = snowflake_account_role.loader.name
 }
 
 output "analyst_role_name" {
-  value = snowflake_role.analyst.name
+  value = snowflake_account_role.analyst.name
 }
 
 output "warehouse_transform_name" {
