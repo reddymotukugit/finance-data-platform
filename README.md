@@ -253,9 +253,3 @@ Unpause `finance_data_platform_daily` and trigger a manual run — all 26 tasks 
 **Signed amount convention** — Refunds, disputes, and adjustments are stored as negative amounts in `stg_finance_ledger_events`. Charges and payouts are positive. Makes aggregations in Gold straightforward.
 
 **Sparse entity freshness** — Freshness checks are disabled (`freshness: null`) for prices and products (static reference data) and set to 72 h / 168 h for refunds and disputes (legitimately low-volume). Prevents false pipeline alerts.
-
----
-
-## License
-
-MIT
